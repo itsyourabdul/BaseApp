@@ -53,6 +53,7 @@
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .logo-group {
@@ -293,6 +294,31 @@
             filter: drop-shadow(0 0 15px #00F0FF);
         }
 
+        /* Referral Card - NEW for virality */
+        .referral-card {
+            background: linear-gradient(135deg, rgba(0,82,255,0.12), rgba(0,240,255,0.12));
+            border: 3px solid #00F0FF;
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 520px;
+            margin: 40px auto;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 240, 255, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .referral-card:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 80px rgba(0, 240, 255, 0.6);
+        }
+
+        .referral-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #00F0FF;
+        }
+
         /* Controls */
         .controls {
             position: absolute;
@@ -389,6 +415,20 @@
             transform: scale(1.4);
         }
 
+        /* Share button styling */
+        #share-btn {
+            background: #1DA1F2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 20px #1DA1F2;
+        }
+
         /* Keyframes - smoother & cartoonish */
         @keyframes floatBlock {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -416,6 +456,53 @@
             opacity: 0.7;
             z-index: 3;
             filter: drop-shadow(0 0 30px #00F0FF);
+        }
+
+        /* Made by badge - bottom right */
+        .made-by {
+            position: fixed;
+            bottom: 28px;
+            right: 40px;
+            z-index: 999;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: #00F0FF;
+            text-shadow: 0 0 12px #00F0FF;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            pointer-events: auto;
+        }
+
+        .made-by:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        /* Mobile responsiveness improvements */
+        @media (max-width: 768px) {
+            .controls {
+                padding: 12px 20px;
+                gap: 12px;
+                bottom: 20px;
+            }
+            .timeline {
+                width: 220px;
+            }
+            .scene-title {
+                font-size: 38px;
+            }
+            header {
+                padding: 16px 20px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .app-mockup {
+                width: 280px;
+                height: 520px;
+            }
         }
     </style>
 </head>
@@ -446,24 +533,28 @@
                 </div>
             </div>
             
-            <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; letter-spacing: -1px;">
+            <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; letter-spacing: -1px; text-align: center; max-width: 420px;">
                 The Everything App on the Global Economy
             </h1>
             
-            <a href="https://base.app/" target="_blank" 
-               style="background: #0052FF; color: white; padding: 12px 28px; border-radius: 9999px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
-                Get Base App →
+            <!-- Improved header CTA - now points to YOUR referral link -->
+            <a href="https://base.app/invite/paimon/7H9HMVYB" target="_blank" 
+               style="background: linear-gradient(90deg, #0052FF, #00F0FF); color: white; padding: 14px 32px; border-radius: 9999px; text-decoration: none; font-weight: 700; font-size: 17px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.5); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+                🚀 Join Base App with my invite →
             </a>
         </header>
 
         <div class="video-wrapper">
             
-            <!-- Scene 1: Intro -->
+            <!-- Scene 1: Intro - MORE INFO ADDED -->
             <div id="scene-1" class="scene active">
                 <div class="scene-content">
                     <div style="font-size: 18px; letter-spacing: 8px; color: #00F0FF; margin-bottom: 16px; font-weight: 600;">ONCHAIN REVOLUTION</div>
                     <h1 class="scene-title glow-text">A global economy,<br>built by all of us</h1>
-                    <p class="scene-subtitle">Base is Ethereum Layer 2. Fast. Cheap. Open.<br>Base App is the everything app that lives on it.</p>
+                    <p class="scene-subtitle">
+                        Base is Coinbase’s Ethereum Layer 2 — fast, cheap (&lt;$0.01 fees), and open.<br>
+                        Over 6 Mwei gas, instant finality, secured by Ethereum. Base App is the everything app that lives on it: social feeds, instant payments, DeFi, and self-custody in one beautiful experience.
+                    </p>
                     
                     <!-- More cartoonish logos floating -->
                     <div style="position: relative; height: 180px; margin: 40px 0;">
@@ -477,7 +568,7 @@
                 </div>
             </div>
 
-            <!-- Scene 2: Base Chain -->
+            <!-- Scene 2: Base Chain - MORE INFO ADDED -->
             <div id="scene-2" class="scene">
                 <div class="scene-content">
                     <h1 class="scene-title">@base</h1>
@@ -491,6 +582,19 @@
                         <div class="block">E</div>
                     </div>
                     
+                    <!-- Extra info box -->
+                    <div style="max-width: 520px; margin: 40px auto; background: rgba(255,255,255,0.06); border-radius: 24px; padding: 24px; text-align: left;">
+                        <h4 style="color: #00F0FF; text-align: center; margin-bottom: 16px; font-size: 20px;">Why Base is winning in 2026</h4>
+                        <ul style="list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; font-size: 17px; line-height: 1.5;">
+                            <li style="display: flex; align-items: center; gap: 10px;">✅ <strong>Ultra-low fees</strong> — ~$0.005 per transaction</li>
+                            <li style="display: flex; align-items: center; gap: 10px;">✅ <strong>Lightning finality</strong> — confirmations in &lt;2 seconds</li>
+                            <li style="display: flex; align-items: center; gap: 10px;">✅ <strong>OP Stack + Ethereum security</strong> — battle-tested</li>
+                            <li style="display: flex; align-items: center; gap: 10px;">✅ <strong>Millions of users &amp; billions in TVL</strong></li>
+                            <li style="display: flex; align-items: center; gap: 10px;">✅ <strong>100% EVM compatible</strong> — any Ethereum dApp works instantly</li>
+                            <li style="display: flex; align-items: center; gap: 10px;">✅ <strong>Built by Coinbase</strong> — enterprise-grade infrastructure</li>
+                        </ul>
+                    </div>
+                    
                     <!-- Extra cartoonish logo -->
                     <div style="position: absolute; top: 25%; right: 8%; font-size: 80px; opacity: 0.6; animation: wobble 3s infinite ease-in-out;">
                         <div class="base-logo cartoon-logo">
@@ -500,11 +604,11 @@
                 </div>
             </div>
 
-            <!-- Scene 3: Base App -->
+            <!-- Scene 3: Base App - MORE INFO ADDED -->
             <div id="scene-3" class="scene">
                 <div class="scene-content">
                     <h1 class="scene-title">@baseapp</h1>
-                    <p class="scene-subtitle">The everything app on Base.<br>Social feeds, instant payments, onchain everything.</p>
+                    <p class="scene-subtitle">The everything app on Base.<br>Social feeds, instant payments, portfolio tracking, NFT drops, and onchain everything — all self-custodial.</p>
                     
                     <div class="app-mockup">
                         <div class="app-header">
@@ -518,6 +622,11 @@
                             <div class="post">📈 My portfolio just hit a new ATH on Base</div>
                         </div>
                     </div>
+                    
+                    <!-- Extra info below mockup -->
+                    <p style="margin-top: 30px; font-size: 19px; max-width: 580px; margin-left: auto; margin-right: auto; color: #ddd;">
+                        No more separate wallets. No more gas headaches. Just open Base App and live onchain — post, pay, earn, and own your data forever.
+                    </p>
                 </div>
             </div>
 
@@ -531,28 +640,28 @@
                         <div class="feature-card">
                             <span class="feature-icon">⚡</span>
                             <h3 style="font-size: 24px; margin-bottom: 8px;">Lightning Fast</h3>
-                            <p>Instant transactions. No more waiting.</p>
+                            <p>Instant transactions. No more waiting for 12-second blocks.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">💸</span>
                             <h3 style="font-size: 24px; margin-bottom: 8px;">Cheap Forever</h3>
-                            <p>6 Mwei gas. Send money like texting.</p>
+                            <p>6 Mwei gas. Send money like texting — costs pennies.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">🌐</span>
                             <h3 style="font-size: 24px; margin-bottom: 8px;">Onchain Social</h3>
-                            <p>Follow, post, earn — all on Base.</p>
+                            <p>Follow, post, earn rewards — your feed lives on Base forever.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">🔒</span>
                             <h3 style="font-size: 24px; margin-bottom: 8px;">Self-Custody</h3>
-                            <p>Your keys, your app, your economy.</p>
+                            <p>Your keys, your app, your economy. No middlemen.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Scene 5: Community + Follows (NEW) -->
+            <!-- Scene 5: Community + Follows + REFERRAL -->
             <div id="scene-5" class="scene">
                 <div class="scene-content">
                     <h1 class="scene-title">Join the movement</h1>
@@ -586,6 +695,18 @@
                             </div>
                         </a>
                     </div>
+
+                    <!-- NEW VIRAL REFERRAL CARD -->
+                    <div class="referral-card">
+                        <h3>🎟️ My Personal Base App Invite</h3>
+                        <p style="font-size: 20px; margin-bottom: 20px; color: #ddd;">Click below to jump straight into Base App using my referral. Instant access + you support the creator who made this explainer!</p>
+                        <a href="https://base.app/invite/paimon/7H9HMVYB" target="_blank" 
+                           style="display: inline-flex; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(90deg, #0052FF, #00F0FF); color: white; padding: 18px 42px; border-radius: 9999px; font-size: 20px; font-weight: 700; text-decoration: none; box-shadow: 0 0 40px #00F0FF; transition: all 0.3s ease;">
+                            <span>🚀 Open Base App Now</span>
+                            <span style="font-size: 28px;">→</span>
+                        </a>
+                        <p style="margin-top: 20px; font-size: 15px; color: #aaa;">https://base.app/invite/paimon/7H9HMVYB<br><strong>By @itsyourabdul • Help grow the Base community</strong></p>
+                    </div>
                     
                     <p style="color: #aaa; font-size: 20px; max-width: 520px; margin: 0 auto;">
                         Get the latest Base news, drops, and community updates straight from the source.
@@ -593,7 +714,7 @@
                 </div>
             </div>
 
-            <!-- Controls -->
+            <!-- Controls - now includes viral Share button -->
             <div class="controls">
                 <button id="prev-btn">← Prev</button>
                 
@@ -605,12 +726,23 @@
                 
                 <button id="next-btn">Next →</button>
                 
+                <!-- Viral Share Button - unique feature for virality -->
+                <button id="share-btn">
+                    𝕏 Share this explainer
+                </button>
+                
                 <div class="scene-indicator" id="scene-indicator">
                     <!-- Dots populated by JS -->
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Made by badge - bottom right corner (as requested) -->
+    <a href="https://x.com/itsyourabdul" target="_blank" class="made-by">
+        made by @itsyourabdul
+        <span style="font-size: 18px;">🌐</span>
+    </a>
 
     <script>
         // Smooth scene management
@@ -627,6 +759,7 @@
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
         const indicator = document.getElementById('scene-indicator');
+        const shareBtn = document.getElementById('share-btn');
 
         function createDots() {
             indicator.innerHTML = '';
@@ -702,10 +835,9 @@
 
         function startAutoPlay() {
             if (autoInterval) clearInterval(autoInterval);
-            // The progress bar already handles timing, but this keeps it robust
             autoInterval = setInterval(() => {
                 if (isPlaying) nextScene();
-            }, sceneDuration + 100); // small buffer
+            }, sceneDuration + 100);
         }
 
         // Background canvas - smooth animated blockchain particles
@@ -813,12 +945,27 @@
             // Button listeners
             playBtn.addEventListener('click', togglePlayPause);
             nextBtn.addEventListener('click', () => {
-                if (!isPlaying) togglePlayPause(); // resume if paused
+                if (!isPlaying) togglePlayPause();
                 nextScene();
             });
             prevBtn.addEventListener('click', () => {
                 if (!isPlaying) togglePlayPause();
                 prevScene();
+            });
+            
+            // Viral Share button - pre-filled tweet with your referral + tag
+            shareBtn.addEventListener('click', () => {
+                const tweetText = encodeURIComponent(
+                    `🌐 Just watched this EPIC Base × Base App animated explainer by @itsyourabdul!\n\n` +
+                    `The everything app on the global economy is LIVE 🔥\n\n` +
+                    `Join Base App instantly using my referral 👇\n` +
+                    `https://base.app/invite/paimon/7H9HMVYB\n\n` +
+                    `#Base #BaseApp #Onchain #Crypto #Web3`
+                );
+                window.open(`https://x.com/intent/tweet?text=${tweetText}`, '_blank');
+                
+                // Tiny visual feedback on the background canvas (extra particles burst)
+                console.log('%c🚀 Shared! This explainer is now going viral thanks to you ❤️', 'color:#00F0FF; font-weight:700');
             });
             
             // Keyboard support
@@ -835,7 +982,6 @@
             timeline.addEventListener('click', (e) => {
                 const rect = timeline.getBoundingClientRect();
                 const percent = (e.clientX - rect.left) / rect.width;
-                // Restart progress from clicked point (visual only - keeps flow simple)
                 progressBar.style.transition = 'none';
                 progressBar.style.width = `${percent * 100}%`;
                 void progressBar.offsetWidth;
@@ -843,7 +989,7 @@
                 progressBar.style.width = '100%';
             });
             
-            console.log('%c✅ Base × Base App explainer enhanced with smoother UX, cartoonish logos, community follows & animated background!', 'color:#00F0FF; font-size:13px; font-weight:700');
+            console.log('%c✅ Base × Base App explainer enhanced with more info, YOUR referral link, share-to-X virality, made-by badge & smoother UX!', 'color:#00F0FF; font-size:13px; font-weight:700');
         }
         
         window.onload = init;
