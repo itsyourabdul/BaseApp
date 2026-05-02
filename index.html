@@ -134,6 +134,12 @@
             max-width: 940px;
             margin: 0 auto;
             opacity: 1;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .scene-title {
@@ -349,6 +355,94 @@
             box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
         }
 
+        /* === CUTE BASE MASCOT (Basey) - Animated video character === */
+        .mascot-container {
+            position: fixed;
+            bottom: 90px;
+            left: 50px;
+            z-index: 999;
+            cursor: pointer;
+            animation: mascotFloat 3.2s ease-in-out infinite;
+            filter: drop-shadow(0 20px 40px rgba(0, 240, 255, 0.6));
+            transition: transform 0.3s ease;
+        }
+
+        .mascot-container:hover {
+            transform: scale(1.15) rotate(8deg);
+        }
+
+        .mascot-speech {
+            position: absolute;
+            top: -78px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: #0A0A0A;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-size: 17px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 15px 35px rgba(0, 240, 255, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: speechPop 4.5s infinite ease-in-out;
+            z-index: 1000;
+        }
+
+        .mascot-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 12px solid #fff;
+        }
+
+        @keyframes mascotFloat {
+            0%, 100% { transform: translateY(0) rotate(-6deg); }
+            50% { transform: translateY(-35px) rotate(6deg); }
+        }
+
+        @keyframes speechPop {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.12); }
+        }
+
+        /* Mascot SVG styling */
+        #base-mascot {
+            animation: mascotWiggle 1.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes mascotWiggle {
+            from { transform: rotate(-4deg); }
+            to { transform: rotate(4deg); }
+        }
+
+        /* Video-like section entrance animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-play-state: paused;
+        }
+
+        .section.visible {
+            animation-play-state: running;
+        }
+
         /* Keyframes */
         @keyframes floatBlock {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -409,11 +503,57 @@
                 gap: 80px;
                 padding: 40px 0;
             }
+
+            .mascot-container {
+                bottom: 40px;
+                left: 20px;
+                transform: scale(0.75);
+            }
+            
+            .mascot-speech {
+                font-size: 15px;
+                padding: 8px 18px;
+                top: -62px;
+            }
         }
     </style>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
+
+    <!-- CUTE BASE MASCOT: "Basey" - Animated video companion -->
+    <div class="mascot-container" onclick="window.open('https://base.app/invite/paimon/7H9HMVYB','_blank')">
+        <div class="mascot-speech" id="speech-bubble">
+            <span id="speech-text">Hey! I'm Basey 🐳 Let's trade on Base! 🚀</span>
+        </div>
+        <svg id="base-mascot" width="160" height="190" viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Body -->
+            <rect x="35" y="72" width="90" height="95" rx="28" ry="28" fill="#0052FF"/>
+            <!-- Head -->
+            <ellipse cx="80" cy="58" rx="48" ry="46" fill="#00F0FF"/>
+            <!-- B on body -->
+            <text x="80" y="135" font-family="Poppins, sans-serif" font-size="55" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">B</text>
+            <!-- Eyes -->
+            <circle cx="48" cy="48" r="13" fill="#0A0A0A"/>
+            <circle cx="112" cy="48" r="13" fill="#0A0A0A"/>
+            <!-- Eye shines -->
+            <circle cx="53" cy="44" r="5" fill="#ffffff"/>
+            <circle cx="117" cy="44" r="5" fill="#ffffff"/>
+            <!-- Happy mouth -->
+            <path id="mouth-path" d="M48 73 Q80 88 112 73" stroke="#0A0A0A" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <!-- Left arm (waving) -->
+            <line id="left-arm" x1="38" y1="95" x2="12" y2="125" stroke="#00F0FF" stroke-width="22" stroke-linecap="round"/>
+            <!-- Right arm (waving) -->
+            <line id="right-arm" x1="122" y1="95" x2="148" y2="125" stroke="#00F0FF" stroke-width="22" stroke-linecap="round"/>
+            <!-- Legs -->
+            <rect x="52" y="160" width="20" height="28" rx="8" fill="#0052FF"/>
+            <rect x="88" y="160" width="20" height="28" rx="8" fill="#0052FF"/>
+            <!-- Little sparkles around head -->
+            <circle cx="28" cy="18" r="6" fill="#00F0FF" opacity="0.7"/>
+            <circle cx="132" cy="22" r="5" fill="#00F0FF" opacity="0.7"/>
+            <circle cx="22" cy="32" r="4" fill="#00F0FF" opacity="0.7"/>
+        </svg>
+    </div>
 
     <div class="container">
         <header>
@@ -729,7 +869,7 @@
             }, 1100);
         }
 
-        // Live stats ticker animation - founders will love seeing their growth highlighted
+        // Live stats ticker animation
         function animateLiveStats() {
             const tvlEl = document.getElementById('tvl');
             const dauEl = document.getElementById('dau');
@@ -740,7 +880,6 @@
             let txns = 8200000;
 
             setInterval(() => {
-                // Simulate live growth
                 tvl += Math.floor(Math.random() * 1200000) + 800000;
                 dau += Math.floor(Math.random() * 800) + 300;
                 txns += Math.floor(Math.random() * 45000) + 20000;
@@ -751,12 +890,87 @@
             }, 2800);
         }
 
+        // === CUTE MASCOT ANIMATION LOGIC ===
+        function animateMascot() {
+            const speechBubble = document.getElementById('speech-bubble');
+            const speechText = document.getElementById('speech-text');
+            const mascot = document.getElementById('base-mascot');
+            const mouth = document.getElementById('mouth-path');
+            const leftArm = document.getElementById('left-arm');
+            const rightArm = document.getElementById('right-arm');
+
+            const speeches = [
+                "Hey! I'm Basey 🐳 Let's trade on Base! 🚀",
+                "200ms blocks = instant wins ⚡",
+                "Sniping tokens with friends in chat 💬",
+                "USDC payments = free & instant 💸",
+                "3.35% APY on your USDC daily 📈",
+                "Be early. Trade social. Own the future 🔥"
+            ];
+            let speechIndex = 0;
+
+            // Cycle mascot speech bubbles like a real video narrator
+            setInterval(() => {
+                speechIndex = (speechIndex + 1) % speeches.length;
+                speechText.style.opacity = 0;
+                
+                setTimeout(() => {
+                    speechText.textContent = speeches[speechIndex];
+                    speechText.style.opacity = 1;
+                }, 300);
+            }, 4200);
+
+            // Occasional mouth smile animation + arm wave
+            setInterval(() => {
+                // Quick mouth smile pop
+                mouth.setAttribute('d', 'M48 73 Q80 95 112 73');
+                setTimeout(() => {
+                    mouth.setAttribute('d', 'M48 73 Q80 88 112 73');
+                }, 220);
+
+                // Arm wave
+                leftArm.setAttribute('x2', '8');
+                rightArm.setAttribute('x2', '152');
+                setTimeout(() => {
+                    leftArm.setAttribute('x2', '12');
+                    rightArm.setAttribute('x2', '148');
+                }, 180);
+            }, 1800);
+
+            // Make mascot eyes "blink" randomly
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    mascot.style.opacity = '0.2';
+                    setTimeout(() => { mascot.style.opacity = '1'; }, 80);
+                }
+            }, 2400);
+
+            console.log('%c🐳 Basey the Mascot is now your animated video companion!', 'color:#00F0FF; font-weight:700; font-size:15px');
+        }
+
+        // Scroll-triggered video-like section animations
+        function initScrollAnimations() {
+            const sections = document.querySelectorAll('.section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.3 });
+            
+            sections.forEach(section => observer.observe(section));
+        }
+
         // Initialize everything
         function init() {
             initBackground();
             animateLiveStats();
+            animateMascot();
+            initScrollAnimations();
             
-            console.log('%c✅ Base × Base App explainer refreshed: zoomed out, fully scrollable, new fonts, live stats in top-left, logo group removed!', 'color:#00F0FF; font-weight:700; font-size:14px');
+            console.log('%c✅ Base × Base App explainer now feels like a full animated video with cute mascot Basey! 🐳', 'color:#00F0FF; font-weight:700; font-size:14px');
         }
         
         window.onload = init;
