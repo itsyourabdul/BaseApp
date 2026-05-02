@@ -1,36 +1,844 @@
-<div class="trading-panel" id="trading-panel">
-    <div class="trading-header">
-        <div class="token-name">
-            🌍 <span>MARKET HUB</span>
-            <span class="trend-label">LIVE • BASE L2</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base × Base App • The Everything App on the Global Economy • HUB</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --base-blue: #0052FF;
+            --base-cyan: #00F0FF;
+            --hud-bg: rgba(6, 6, 6, 0.88);
+            --hud-border: 1px solid rgba(0, 240, 255, 0.2);
+            --cyber-glow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+            background: #020202; 
+            color: white;
+            height: auto;
+            min-height: 100vh;
+            overflow: auto;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        /* [NEW] Animated Video Background */
+        #bg-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 1;
+            transform: translateX(-50%) translateY(-50%);
+            opacity: 0.25; /* Subtle opacity so it doesn't overpower the UI */
+            pointer-events: none;
+            object-fit: cover;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Command Center HUD Header */
+        header {
+            position: sticky;
+            top: 15px;
+            z-index: 1000;
+            margin-top: 15px;
+            width: calc(100% - 30px);
+            margin-left: 15px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 0; 
+        }
+
+        .hud-module {
+            background: var(--hud-bg);
+            border: var(--hud-border);
+            box-shadow: var(--cyber-glow);
+            backdrop-filter: blur(20px);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .hud-brand {
+            border-radius: 16px 0 0 16px;
+            padding: 0 30px 0 20px;
+            border-right: none;
+        }
+        
+        .hud-tagline-module {
+            justify-content: center;
+            padding: 0 40px;
+            border-left: none;
+            border-right: none;
+        }
+
+        .hud-monitor {
+            border-radius: 0 16px 16px 0;
+            padding: 0 25px;
+            border-left: none;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 26px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .logo-b {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #0052FF, #00F0FF);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 0 15px rgba(0,240,255,0.4);
+        }
+
+        .tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            color: #ccc;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .tagline-accent {
+            color: #00F0FF;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .live-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-family: 'Share Tech Mono', monospace; 
+            font-size: 15px;
+            color: #aaa;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        .stat-item::after {
+            content: '';
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.1);
+            position: absolute;
+            right: -10px;
+        }
+        .stat-item:last-child::after { display: none; }
+
+        .stat-icon { font-size: 17px; opacity: 0.8; }
+        .stat-value { color: #eee; font-weight: 500; letter-spacing: -0.5px; }
+        .stat-value-accent { color: #00F0FF; animation: pulseStat 2.5s infinite; }
+        .stat-label { font-size: 12px; color: #777; margin-top: -2px; }
+
+        .header-cta {
+            background: linear-gradient(90deg, #0052FF, #00F0FF);
+            color: white;
+            padding: 12px 26px;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 10px;
+        }
+
+        .header-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.7);
+        }
+
+        .main-content {
+            padding: 80px 0 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 140px;
+        }
+
+        .section {
+            width: 100%;
+            max-width: 1000px; 
+            margin: 0 auto;
+            opacity: 1;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scene-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 48px; 
+            font-weight: 700;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: -1.5px;
+        }
+
+        .scene-subtitle {
+            font-size: 22px;
+            color: #b0b0b0; 
+            max-width: 760px;
+            margin: 0 auto 40px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .onchain-rev-label {
+            font-size: 16px;
+            letter-spacing: 7px;
+            color: #00F0FF;
+            margin-bottom: 16px;
+            font-weight: 700;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .app-mockup {
+            width: 350px;
+            height: 640px;
+            background: linear-gradient(180deg, #080808 0%, #111 100%);
+            border-radius: 56px;
+            margin: 50px auto;
+            position: relative;
+            box-shadow: 
+                0 0 80px rgba(0, 242, 255, 0.25), 
+                0 40px 100px rgba(0,0,0,0.8), 
+                inset 0 0 5px rgba(255,255,255,0.05); 
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 2px solid rgba(255,255,255,0.03); 
+        }
+        
+        .app-mockup::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(0, 82, 255, 0.15) 0%, rgba(10,10,10,0) 70%);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            opacity: 0.6;
+        }
+
+        .app-mockup:hover { transform: translateY(-10px) rotateX(2deg); }
+        .app-mockup:hover::before { opacity: 1; }
+
+        .app-header {
+            height: 85px;
+            background: linear-gradient(90deg, #0052FF, #00F0FF);
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            color: white;
+            font-weight: 700;
+            font-size: 22px;
+            gap: 16px;
+        }
+
+        .app-screen {
+            padding: 26px;
+            text-align: left;
+            color: #eee;
+            height: calc(100% - 85px);
+            overflow-y: auto;
+            scrollbar-width: none; 
+        }
+        .app-screen::-webkit-scrollbar { display: none; }
+
+        .post {
+            background: rgba(255,255,255,0.04); 
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 16.5px;
+            line-height: 1.4;
+            border: 1px solid rgba(255,255,255,0.02);
+            animation: postPop 2.8s infinite ease-in-out;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: rgba(10, 10, 10, 0.5);
+            border-radius: 28px;
+            padding: 38px;
+            text-align: left;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top left, rgba(0, 240, 255, 0.08) 0%, rgba(10,10,10,0) 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 242, 255, 0.2);
+        }
+        .feature-card:hover::before { opacity: 1; }
+
+        .feature-icon { font-size: 58px; margin-bottom: 26px; display: block; position: relative; z-index: 2; }
+        .feature-title { font-size: 27px; margin-bottom: 12px; font-family: 'Poppins', sans-serif; letter-spacing: -0.5px; position: relative; z-index: 2; }
+        .feature-desc { font-size: 17px; color: #aaa; line-height: 1.5; position: relative; z-index: 2; }
+
+        .trading-panel {
+            position: fixed;
+            right: 30px;
+            top: calc(70px + 100px); 
+            width: 390px;
+            max-height: calc(100vh - 200px);
+            background: var(--hud-bg);
+            border: var(--hud-border);
+            border-radius: 28px;
+            box-shadow: 
+                0 0 60px rgba(0, 240, 255, 0.3),
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                inset 0 0 30px rgba(255,255,255,0.03);
+            z-index: 900;
+            padding: 26px;
+            color: white;
+            font-family: 'Inter', system_ui, sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(25px);
+        }
+
+        .trading-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .token-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .trend-label {
+            font-size: 12px; 
+            font-family: 'Share Tech Mono', monospace;
+            background: rgba(0,240,255,0.1); 
+            color: #00F0FF; 
+            padding: 4px 12px; 
+            border-radius: 9999px; 
+            font-weight: 500;
+            border: 1px solid rgba(0,240,255,0.15);
+        }
+
+        .price-container { text-align: right; font-family: 'Share Tech Mono', monospace; }
+        .price { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: #eee; }
+        .change-positive { color: #00ff9d; font-size: 17px; font-weight: 500; }
+
+        .chart-wrapper {
+            height: 220px;
+            margin: 24px 0 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.03);
+            padding: 10px;
+        }
+
+        .trades-feed { font-family: 'Share Tech Mono', monospace; font-size: 14px; }
+        
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 25px;
+            margin: 60px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .follow-card {
+            background: rgba(10, 10, 10, 0.4);
+            border-radius: 24px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .follow-card:hover {
+            transform: scale(1.03);
+            background: rgba(0, 240, 255, 0.05);
+            border-color: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 242, 255, 0.15);
+        }
+        
+        .follow-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .follow-handle { color: #00F0FF; text-shadow: 0 0 10px rgba(0, 240, 255, 0.4); }
+
+        .follow-icon { font-size: 40px; opacity: 0.8; transition: opacity 0.3s ease; }
+        .follow-card:hover .follow-icon { opacity: 1; filter: drop-shadow(0 0 15px #00F0FF); }
+
+        /* [UPDATED] Shoutout Banner with Lovely Note */
+        .shoutout-banner {
+            background: linear-gradient(90deg, rgba(0,82,255,0.12), rgba(0,240,255,0.12));
+            border: 1px solid rgba(0,240,255,0.25);
+            border-radius: 30px;
+            padding: 28px 36px;
+            margin: 40px auto;
+            max-width: 780px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .shoutout-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #00F0FF;
+            letter-spacing: -0.5px;
+        }
+
+        .shoutout-note {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #ddd;
+            font-weight: 400;
+        }
+
+        .mascot-container {
+            position: fixed;
+            bottom: 30px; 
+            left: 30px;   
+            z-index: 1100; 
+            cursor: pointer;
+            animation: mascotFloat 3.2s ease-in-out infinite;
+            filter: drop-shadow(0 20px 40px rgba(0, 240, 255, 0.5));
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: scale(0.65); 
+            transform-origin: bottom left;
+        }
+
+        .mascot-container:hover { transform: scale(0.75) rotate(5deg); }
+
+        .mascot-speech {
+            position: absolute;
+            top: -85px; 
+            left: 70px; 
+            background: #fff;
+            color: #020202;
+            padding: 14px 28px;
+            border-radius: 9999px;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 15px 35px rgba(0, 240, 255, 0.4), 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: speechPop 4.5s infinite ease-in-out;
+            z-index: 1110;
+        }
+
+        .mascot-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 30px; 
+            transform: translateX(0);
+            border-left: 13px solid transparent;
+            border-right: 13px solid transparent;
+            border-top: 13px solid #fff;
+        }
+
+        @keyframes mascotFloat {
+            0%, 100% { transform: translateY(0) scale(0.65) rotate(-3deg); }
+            50% { transform: translateY(-25px) scale(0.65) rotate(3deg); }
+        }
+
+        @keyframes speechPop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        #base-mascot { animation: mascotWiggle 2s ease-in-out infinite alternate; }
+
+        @keyframes mascotWiggle {
+            from { transform: rotate(-3deg); }
+            to { transform: rotate(3deg); }
+        }
+
+        @keyframes pulseStat {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+            50% { opacity: 0.7; text-shadow: 0 0 5px rgba(0, 240, 255, 0.2); }
+        }
+
+        @keyframes postPop {
+            0%, 100% { transform: scale(1); background: rgba(255,255,255,0.04); }
+            50% { transform: scale(1.02); background: rgba(255,255,255,0.07); }
+        }
+
+        @media (max-width: 1280px) {
+            .trading-panel { display: none !important; }
+            header { grid-template-columns: 1fr; gap: 10px; top: 10px; width: calc(100% - 20px); margin-left: 10px; }
+            .hud-module { height: auto; padding: 15px; border-radius: 12px; justify-content: center; text-align: center; }
+            .hud-brand { padding: 15px 20px; }
+            .hud-tagline-module { display: none; } 
+            .hud-monitor { padding: 12px 20px; flex-wrap: wrap; gap: 10px; }
+            .header-cta { width: 100%; justify-content: center; margin: 10px 0 0; }
+            .community-grid { grid-template-columns: 1fr; } 
+            .mascot-container { bottom: 20px; left: 20px; transform: scale(0.55); }
+            .mascot-speech { font-size: 15px; padding: 10px 22px; top: -70px; left: 50px; }
+            @keyframes mascotFloat {
+                0%, 100% { transform: translateY(0) scale(0.55) rotate(-3deg); }
+                50% { transform: translateY(-15px) scale(0.55) rotate(3deg); }
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source src="https://assets.codepen.io/3364143/7btrrd.mp4" type="video/mp4">
+    </video>
+
+    <div class="mascot-container" onclick="window.open('https://base.app/invite/paimon/7H9HMVYB','_blank')">
+        <div class="mascot-speech" id="speech-bubble">
+            <span id="speech-text">Hub Online 🐳 Let's trade on Base! 🚀</span>
+        </div>
+        <svg id="base-mascot" width="152" height="178" viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="35" y="72" width="90" height="95" rx="28" ry="28" fill="#0052FF"/>
+            <ellipse cx="80" cy="58" rx="48" ry="46" fill="#00F0FF"/>
+            <text x="80" y="135" font-family="Poppins, sans-serif" font-size="55" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">B</text>
+            <circle cx="48" cy="48" r="13" fill="#020202"/>
+            <circle cx="112" cy="48" r="13" fill="#020202"/>
+            <path id="mouth-path" d="M48 73 Q80 88 112 73" stroke="#020202" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <line id="left-arm" x1="38" y1="95" x2="12" y2="125" stroke="#00F0FF" stroke-width="22" stroke-linecap="round"/>
+            <line id="right-arm" x1="122" y1="95" x2="148" y2="125" stroke="#00F0FF" stroke-width="22" stroke-linecap="round"/>
+            <rect x="52" y="160" width="20" height="28" rx="8" fill="#0052FF"/>
+            <rect x="88" y="160" width="20" height="28" rx="8" fill="#0052FF"/>
+            <circle cx="28" cy="18" r="6" fill="#00F0FF" opacity="0.6"/>
+            <circle cx="132" cy="22" r="5" fill="#00F0FF" opacity="0.6"/>
+        </svg>
+    </div>
+
+    <div class="trading-panel" id="trading-panel">
+        <div class="trading-header">
+            <div class="token-name">
+                📊 
+                <span>LIVE FEED</span>
+                <span class="trend-label">BTC • ETH • USDC</span>
+            </div>
+            <div class="price-container">
+                <div id="current-price" class="price">REAL-TIME</div>
+            </div>
+        </div>
+
+        <div class="chart-wrapper">
+            <canvas id="price-chart-canvas"></canvas>
+        </div>
+
+        <div class="recent-trades">
+            <h4 style="font-size: 13px; font-family: 'Share Tech Mono', monospace; color: #777; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">🔥 NETWORK PULSE</h4>
+            <div id="trades-feed" class="trades-feed" style="flex: 1; overflow-y: auto; line-height: 1.6; color: #eee;">
+                [SYS] Tracking Live Mainnet Activity...<br>
+                [SYS] Fetching optimal global routes...<br>
+                [SYS] Yield steady at 3.35% APY...<br>
+            </div>
         </div>
     </div>
 
-    <div class="asset-monitor" style="margin-top: 20px; display: flex; flex-direction: column; gap: 15px;">
-        <div class="asset-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 12px;">
-            <div style="display: flex; align-items: center; gap: 10px;"><span>orange_circle</span> **BTC**</div>
-            <div style="text-align: right;">
-                <div style="font-weight: 700;">$77,420.00</div>
-                <div style="color: #00ff9d; font-size: 12px;">+1.2%</div>
+    <div class="container">
+        <header id="hud-header">
+            <div class="hud-module hud-brand">
+                <a href="https://base.org" target="_blank" class="header-logo">
+                    <div class="logo-b">B</div>
+                    Base
+                </a>
             </div>
-        </div>
-        <div class="asset-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 12px;">
-            <div style="display: flex; align-items: center; gap: 10px;"><span>blue_circle</span> **ETH**</div>
-            <div style="text-align: right;">
-                <div style="font-weight: 700;">$2,288.50</div>
-                <div style="color: #ff4d4d; font-size: 12px;">-0.8%</div>
+            
+            <div class="hud-module hud-tagline-module">
+                <div class="tagline">The Everything App on the <span class="tagline-accent">Global Economy</span></div>
             </div>
-        </div>
-        <div class="asset-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 12px;">
-            <div style="display: flex; align-items: center; gap: 10px;"><span>dollar</span> **USDC**</div>
-            <div style="text-align: right;">
-                <div style="font-weight: 700;">$1.00</div>
-                <div style="color: #00F0FF; font-size: 12px;">3.50% APY</div>
+
+            <div class="hud-module hud-monitor">
+                <div class="live-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">🌐</span>
+                        <div>
+                            <div class="stat-label">TVL</div>
+                            <div id="tvl" class="stat-value">$4.49B</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <div>
+                            <div class="stat-label">DAU</div>
+                            <div id="dau" class="stat-value">512K</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⚡</span>
+                        <div>
+                            <div class="stat-label">Txns/Day</div>
+                            <div id="txns" class="stat-value stat-value-accent">8.2M</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="https://base.app/invite/paimon/7H9HMVYB" target="_blank" class="header-cta">
+                    🚀 Join & Trade Now
+                </a>
+            </div>
+        </header>
+
+        <div class="main-content">
+            
+            <div class="section">
+                <div style="text-align: center;">
+                    <div class="onchain-rev-label">ONCHAIN REVOLUTION • 2026</div>
+                    <h1 class="scene-title" style="text-shadow: 0 0 50px rgba(0, 240, 255, 0.4);">A global economy,<br>built by all of us</h1>
+                    <p class="scene-subtitle">
+                        Base is Coinbase’s Ethereum L2 — the fastest-growing chain in crypto. Ultra-low fees, lightning speed, and full Ethereum security.<br><br>
+                        <strong>Base App</strong> is the everything app living on it: social trading feed where you discover tokens early, instant USDC payments, in-chat trading, and real yield. 
+                        Over <span style="color: #00F0FF;">$4.49B TVL</span> and 500k+ daily active traders already living onchain.
+                    </p>
+                    
+                    <div class="shoutout-banner">
+                        <div class="shoutout-title">🔥 BIG SHOUTOUT to the Base Team!</div>
+                        <div class="shoutout-note">
+                            Building the onchain future isn't just about code—it's about community, vision, and relentless execution. To the brilliant minds at Base and the Base App: thank you for making the global economy faster, simpler, and beautifully accessible to everyone. Your hard work is paving the way for the next billion users. Keep shipping! 💙
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div style="text-align: center;">
+                    <div style="display: inline-flex; align-items: center; gap: 14px; font-size: 28px; font-weight: 700; margin-bottom: 24px; color: #00F0FF;">
+                        <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00F0FF, #0052FF); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; box-shadow: 0 0 15px rgba(0,240,255,0.3);">BA</div>
+                        @baseapp
+                    </div>
+                    <h1 class="scene-title">Base App • Built to Trade</h1>
+                    <p class="scene-subtitle">Discover tokens in real time, trade instantly with friends in chat, send free USDC globally, and earn real yield — all self-custodial on Base.</p>
+                    
+                    <div class="app-mockup" id="app-mockup">
+                        <div class="app-header">
+                            <div style="width: 34px; height: 34px; background: linear-gradient(135deg, #00F0FF, #0052FF); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 21px; color: white;">BA</div>
+                            Base App HUB
+                        </div>
+                        <div class="app-screen">
+                            <div class="post">🚀 Sniped $NEWTOKEN early on the feed — already +420% in 8 minutes</div>
+                            <div class="post">💸 Sent 1,250 USDC to @friend instantly — zero fees, global</div>
+                            <div class="post">💬 Traded tokens with friends in encrypted chat — as easy as texting</div>
+                            <div class="post">📈 Just aped into the next memecoin trending on the feed</div>
+                            <div class="post">📊 My USDC is earning 3.35% APY right now — real daily yield</div>
+                            <div class="post">🔥 Be early. Trade social. Keep your keys. This is freedom.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div style="text-align: center;">
+                    <h1 class="scene-title">Join the movement</h1>
+                    <p class="scene-subtitle">Follow the builders & start trading with the community today</p>
+                    
+                    <div class="community-grid">
+                        <a href="https://x.com/Base" target="_blank" class="follow-card">
+                            <div class="follow-icon">🔵</div>
+                            <div>
+                                <div class="follow-title">Follow <span class="follow-handle">@Base</span></div>
+                            </div>
+                        </a>
+                        <a href="https://x.com/baseapp" target="_blank" class="follow-card">
+                            <div class="follow-icon">📱</div>
+                            <div>
+                                <div class="follow-title">Follow <span class="follow-handle">@baseapp</span></div>
+                            </div>
+                        </a>
+                        <a href="https://x.com/jessepollak" target="_blank" class="follow-card">
+                            <div class="follow-icon">👨‍💻</div>
+                            <div>
+                                <div class="follow-title">Follow <span class="follow-handle">@jessepollak</span></div>
+                            </div>
+                        </a>
+                        <a href="https://x.com/itsyourabdul" target="_blank" class="follow-card">
+                            <div class="follow-icon">⚡</div>
+                            <div>
+                                <div class="follow-title">Follow <span class="follow-handle">@itsyourabdul</span></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="chart-wrapper">
-        <canvas id="price-chart-canvas" width="338" height="180"></canvas>
-    </div>
-</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('price-chart-canvas').getContext('2d');
+            
+            // Baseline starting values
+            let btcPrice = 64500;
+            let ethPrice = 3450;
+            let usdcPrice = 1.00;
+
+            const cryptoChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                    datasets: [
+                        {
+                            label: 'BTC',
+                            borderColor: '#F7931A',
+                            backgroundColor: 'rgba(247, 147, 26, 0.1)',
+                            data: Array(10).fill(btcPrice),
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'ETH',
+                            borderColor: '#627EEA',
+                            backgroundColor: 'rgba(98, 126, 234, 0.1)',
+                            data: Array(10).fill(ethPrice),
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'USDC',
+                            borderColor: '#2775CA',
+                            backgroundColor: 'rgba(39, 117, 202, 0.1)',
+                            data: Array(10).fill(usdcPrice),
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 400,
+                        easing: 'linear'
+                    },
+                    scales: {
+                        x: { display: false },
+                        y: {
+                            display: true,
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#aaa', font: { family: "'Share Tech Mono', monospace" } }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#fff',
+                                font: { family: "'Share Tech Mono', monospace" }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Simulate realtime price fluctuations every 2 seconds
+            setInterval(() => {
+                // Fluctuate prices slightly
+                btcPrice += (Math.random() - 0.5) * 150;
+                ethPrice += (Math.random() - 0.5) * 15;
+                // USDC stays relatively perfectly pegged with micro fractions
+                usdcPrice = 1.0000 + (Math.random() - 0.5) * 0.0002;
+
+                // Push new data and shift old out for BTC
+                cryptoChart.data.datasets[0].data.push(btcPrice);
+                cryptoChart.data.datasets[0].data.shift();
+
+                // Push new data and shift old out for ETH
+                cryptoChart.data.datasets[1].data.push(ethPrice);
+                cryptoChart.data.datasets[1].data.shift();
+
+                // Push new data and shift old out for USDC
+                cryptoChart.data.datasets[2].data.push(usdcPrice);
+                cryptoChart.data.datasets[2].data.shift();
+
+                cryptoChart.update();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
