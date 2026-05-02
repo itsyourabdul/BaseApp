@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base × Base App • The Everything App on the Global Economy</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap');
 
         :root {
             --base-blue: #0052FF;
@@ -22,28 +22,32 @@
             font-family: 'Inter', system_ui, sans-serif;
             background: #0A0A0A;
             color: white;
-            overflow: hidden;
-            height: 100vh;
+            height: auto;
+            min-height: 100vh;
+            overflow: auto;
             position: relative;
+            scroll-behavior: smooth;
         }
 
         /* Background Canvas - Cleaned up with subtle Base branding particles */
         #bg-canvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
             opacity: 0.75;
+            pointer-events: none;
         }
 
         .container {
             position: relative;
             z-index: 2;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         header {
@@ -53,67 +57,48 @@
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: sticky;
+            top: 0;
+            background: #0A0A0A;
+            z-index: 50;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .logo-group {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .base-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: -1px;
-        }
-
-        .base-square {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #0052FF, #00F0FF);
-            border-radius: 10px;
-            box-shadow: 0 0 25px #00F0FF, inset 0 0 15px rgba(255,255,255,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .base-square::after {
-            content: 'B';
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .cartoon-logo {
-            animation: wobble 3s infinite ease-in-out;
-        }
-
-        .handle {
-            background: rgba(255,255,255,0.1);
-            padding: 4px 14px;
+        .live-stats {
+            background: rgba(10,10,10,0.9);
+            padding: 8px 20px;
             border-radius: 9999px;
             font-size: 15px;
             font-weight: 600;
             display: flex;
             align-items: center;
+            gap: 14px;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
             gap: 6px;
         }
 
-        .tagline {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 22px;
-            font-weight: 600;
-            letter-spacing: -1px;
+        .stat-value {
             color: #00F0FF;
-            max-width: 420px;
+            animation: pulseStat 2s infinite;
+        }
+
+        .tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: #00F0FF;
+            max-width: 380px;
             line-height: 1.2;
+            text-align: center;
+            flex: 1;
         }
 
         .header-cta {
@@ -129,6 +114,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-shrink: 0;
         }
 
         .header-cta:hover {
@@ -136,62 +122,36 @@
             box-shadow: 0 0 45px rgba(0, 240, 255, 0.8);
         }
 
-        .title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 42px;
-            font-weight: 600;
-            letter-spacing: -2px;
-            text-align: center;
-            margin-top: 40px;
-            background: linear-gradient(90deg, #00F0FF, #0052FF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .video-wrapper {
-            flex: 1;
+        .main-content {
+            padding: 60px 0;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            padding: 0 40px;
+            flex-direction: column;
+            gap: 120px;
         }
 
-        .scene {
-            position: absolute;
+        .section {
             width: 100%;
             max-width: 940px;
-            opacity: 0;
-            transform: translateY(30px) scale(0.97);
-            transition: all 800ms cubic-bezier(0.34, 1.56, 0.64, 1);
-            pointer-events: none;
-        }
-
-        .scene.active {
+            margin: 0 auto;
             opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
-        .scene-content {
-            text-align: center;
-            position: relative;
         }
 
         .scene-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 52px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 42px;
             font-weight: 600;
             line-height: 1.05;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .scene-subtitle {
-            font-size: 23px;
+            font-size: 21px;
             color: #ccc;
             max-width: 720px;
             margin: 0 auto 32px;
             line-height: 1.45;
+            text-align: center;
         }
 
         /* Scene 1 - Cleaner intro with stronger trading hook */
@@ -223,8 +183,8 @@
 
         /* Scene 3 - Enhanced realistic Base App mockup with trading focus */
         .app-mockup {
-            width: 360px;
-            height: 660px;
+            width: 340px;
+            height: 620px;
             background: linear-gradient(180deg, #111, #1a1a1a);
             border-radius: 56px;
             margin: 40px auto;
@@ -371,124 +331,22 @@
         }
 
         .referral-card h3 {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 32px;
             margin-bottom: 12px;
             color: #00F0FF;
         }
 
-        /* Controls - Cleaner and more minimal */
-        .controls {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: rgba(10,10,10,0.95);
-            padding: 12px 28px;
-            border-radius: 9999px;
-            border: 1px solid rgba(255,255,255,0.12);
-            backdrop-filter: blur(20px);
-            z-index: 10;
+        /* Founder love section - Unique & heartfelt */
+        .founder-love {
+            background: rgba(0, 240, 255, 0.1);
+            border: 2px solid #00F0FF;
+            border-radius: 28px;
+            padding: 28px;
+            max-width: 620px;
+            margin: 40px auto 0;
+            text-align: center;
             box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
-        }
-
-        button {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            color: #00F0FF;
-            transform: scale(1.08);
-        }
-
-        .play-btn {
-            background: var(--base-blue);
-            color: white;
-            width: 62px;
-            height: 62px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 0 0 40px #0052FF;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-
-        .play-btn:hover {
-            transform: scale(1.15);
-        }
-
-        .timeline {
-            width: 420px;
-            height: 8px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 9999px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .progress {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            background: linear-gradient(90deg, #00F0FF, #0052FF);
-            width: 0%;
-            transition: width 0.1s linear;
-            box-shadow: 0 0 22px #00F0FF;
-        }
-
-        .scene-indicator {
-            display: flex;
-            gap: 10px;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-
-        .dot.active {
-            background: #00F0FF;
-            box-shadow: 0 0 18px #00F0FF;
-            transform: scale(1.4);
-        }
-
-        #share-btn {
-            background: #1DA1F2;
-            color: white;
-            padding: 12px 26px;
-            border-radius: 9999px;
-            font-size: 16px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 0 22px #1DA1F2;
-            transition: all 0.3s ease;
-        }
-
-        #share-btn:hover {
-            transform: scale(1.06);
-            box-shadow: 0 0 32px #1DA1F2;
         }
 
         /* Keyframes */
@@ -507,83 +365,49 @@
             50% { transform: rotate(5deg) scale(1.08); }
         }
 
-        .glow-text {
-            text-shadow: 0 0 45px #00F0FF;
-        }
-
-        /* Founder love section - Unique & heartfelt */
-        .founder-love {
-            background: rgba(0, 240, 255, 0.1);
-            border: 2px solid #00F0FF;
-            border-radius: 28px;
-            padding: 28px;
-            max-width: 620px;
-            margin: 40px auto 0;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
-        }
-
-        /* Live stats ticker - Unique dynamic element founders will love */
-        .live-stats {
-            position: absolute;
-            top: 24px;
-            right: 40px;
-            background: rgba(10,10,10,0.9);
-            padding: 8px 20px;
-            border-radius: 9999px;
-            font-size: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
-            z-index: 20;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .stat-value {
-            color: #00F0FF;
-            animation: pulseStat 2s infinite;
-        }
-
         @keyframes pulseStat {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
 
+        .glow-text {
+            text-shadow: 0 0 45px #00F0FF;
+        }
+
         /* Mobile improvements */
         @media (max-width: 768px) {
-            .controls {
-                padding: 10px 18px;
-                gap: 12px;
-                bottom: 20px;
-            }
-            .timeline {
-                width: 220px;
-            }
-            .scene-title {
-                font-size: 38px;
-            }
-            .app-mockup {
-                width: 290px;
-                height: 540px;
-            }
             header {
                 padding: 16px 20px;
                 flex-wrap: wrap;
                 gap: 12px;
+                justify-content: center;
             }
+            
             .live-stats {
-                top: 12px;
-                right: 16px;
                 font-size: 13px;
                 padding: 6px 14px;
+                order: -1;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .tagline {
+                font-size: 18px;
+                max-width: none;
+            }
+            
+            .scene-title {
+                font-size: 36px;
+            }
+            
+            .app-mockup {
+                width: 290px;
+                height: 540px;
+            }
+            
+            .main-content {
+                gap: 80px;
+                padding: 40px 0;
             }
         }
     </style>
@@ -591,30 +415,13 @@
 <body>
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Live Stats Ticker - Unique, real-time feel that founders will LOVE -->
-    <div class="live-stats" id="live-stats">
-        <div class="stat-item">🌐 <span id="tvl" class="stat-value">$4.49B</span> TVL</div>
-        <div class="stat-item">👥 <span id="dau" class="stat-value">512K</span> DAU</div>
-        <div class="stat-item">⚡ <span id="txns" class="stat-value">8.2M</span> txns today</div>
-    </div>
-
     <div class="container">
         <header>
-            <div class="logo-group">
-                <!-- Clean Base × Base App branding -->
-                <div class="base-logo cartoon-logo">
-                    <div class="base-square"></div>
-                    <span>base</span>
-                </div>
-                <div class="handle">@base</div>
-
-                <div style="font-size: 32px; font-weight: 700; color: #00F0FF;">×</div>
-                
-                <div class="base-logo cartoon-logo" style="color: #00F0FF;">
-                    <div class="base-square" style="background: linear-gradient(135deg, #00F0FF, #0052FF);">BA</div>
-                    <span>Base App</span>
-                </div>
-                <div class="handle" style="background: rgba(0,240,255,0.3); color: #00F0FF;">@baseapp</div>
+            <!-- Live Stats moved to upper left corner -->
+            <div class="live-stats" id="live-stats">
+                <div class="stat-item">🌐 <span id="tvl" class="stat-value">$4.49B</span> TVL</div>
+                <div class="stat-item">👥 <span id="dau" class="stat-value">512K</span> DAU</div>
+                <div class="stat-item">⚡ <span id="txns" class="stat-value">8.2M</span> txns today</div>
             </div>
             
             <div class="tagline">The Everything App on the Global Economy</div>
@@ -625,11 +432,11 @@
             </a>
         </header>
 
-        <div class="video-wrapper">
+        <div class="main-content">
             
             <!-- Scene 1: Intro - Cleaner, stronger trading hook -->
-            <div id="scene-1" class="scene active">
-                <div class="scene-content">
+            <div class="section">
+                <div style="text-align: center;">
                     <div style="font-size: 18px; letter-spacing: 8px; color: #00F0FF; margin-bottom: 14px; font-weight: 700;">ONCHAIN REVOLUTION • 2026</div>
                     <h1 class="scene-title glow-text">A global economy,<br>built by all of us</h1>
                     <p class="scene-subtitle">
@@ -645,10 +452,10 @@
             </div>
 
             <!-- Scene 2: Base Chain -->
-            <div id="scene-2" class="scene">
-                <div class="scene-content">
-                    <div class="official-base-logo">
-                        <div class="base-square" style="width: 42px; height: 42px;"></div>
+            <div class="section">
+                <div style="text-align: center;">
+                    <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 700; margin-bottom: 20px;">
+                        <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #0052FF, #00F0FF); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">B</div>
                         @base
                     </div>
                     <h1 class="scene-title">The Ethereum L2 powering 2026</h1>
@@ -677,10 +484,10 @@
             </div>
 
             <!-- Scene 3: Base App - Heavily enhanced with trading benefits &amp; influence -->
-            <div id="scene-3" class="scene">
-                <div class="scene-content">
-                    <div class="official-base-logo" style="margin-bottom: 12px;">
-                        <div class="base-square" style="width: 42px; height: 42px; background: linear-gradient(135deg, #00F0FF, #0052FF);">BA</div>
+            <div class="section">
+                <div style="text-align: center;">
+                    <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 700; margin-bottom: 20px; color: #00F0FF;">
+                        <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #00F0FF, #0052FF); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px;">BA</div>
                         @baseapp
                     </div>
                     <h1 class="scene-title">Base App • Built to Trade</h1>
@@ -688,7 +495,7 @@
                     
                     <div class="app-mockup">
                         <div class="app-header">
-                            <div class="base-square" style="width: 32px; height: 32px; font-size: 20px;">BA</div>
+                            <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #00F0FF, #0052FF); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white;">BA</div>
                             Base App
                         </div>
                         <div class="app-screen">
@@ -710,45 +517,45 @@
             </div>
 
             <!-- Scene 4: Features - Trading-focused &amp; benefit-heavy -->
-            <div id="scene-4" class="scene">
-                <div class="scene-content">
+            <div class="section">
+                <div style="text-align: center;">
                     <h1 class="scene-title">Why traders are moving to Base App</h1>
                     <p class="scene-subtitle">Faster, cheaper, more social — and 100% yours</p>
                     
                     <div class="features-grid">
                         <div class="feature-card">
                             <span class="feature-icon">⚡</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px;">Lightning Trades</h3>
+                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Lightning Trades</h3>
                             <p>200ms finality. Buy or sell instantly — no waiting for confirmations.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">💸</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px;">Fees Almost Zero</h3>
+                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Fees Almost Zero</h3>
                             <p>6 Mwei gas. Trade, send, and swap for pennies. Keep more of your wins.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">📈</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px;">Social Trading Feed</h3>
+                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Social Trading Feed</h3>
                             <p>See what the community is buying in real time. Spot trends early and ape in.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">💬</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px;">In-Chat Trading</h3>
+                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">In-Chat Trading</h3>
                             <p>Negotiate and swap tokens directly in encrypted chat with friends or AI agents.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">🔒</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px;">True Self-Custody</h3>
+                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">True Self-Custody</h3>
                             <p>Your keys, your coins. No one can freeze or censor your trades.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">🏆</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px;">Earn While You Hold</h3>
+                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Earn While You Hold</h3>
                             <p>Up to 3.35% APY on USDC — paid daily. Real yield on your stablecoins.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">🔥</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px;">Be Early Every Time</h3>
+                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Be Early Every Time</h3>
                             <p>The social feed shows trending tokens before they explode. Trade first, win big.</p>
                         </div>
                     </div>
@@ -756,8 +563,8 @@
             </div>
 
             <!-- Scene 5: Community + Referral + Unique Founder Love section -->
-            <div id="scene-5" class="scene">
-                <div class="scene-content">
+            <div class="section">
+                <div style="text-align: center;">
                     <h1 class="scene-title">Join the movement</h1>
                     <p class="scene-subtitle">Follow the builders &amp; start trading with the community today</p>
                     
@@ -802,7 +609,7 @@
                     <!-- Unique Founder Love section -->
                     <div class="founder-love">
                         <span style="font-size: 42px; display: block; margin-bottom: 12px;">❤️</span>
-                        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; color: #00F0FF; margin-bottom: 16px;">A love letter to the Base team</h3>
+                        <h3 style="font-family: 'Poppins', sans-serif; font-size: 28px; color: #00F0FF; margin-bottom: 16px;">A love letter to the Base team</h3>
                         <p style="font-size: 19px; line-height: 1.5; max-width: 520px; margin: 0 auto;">
                             To @jessepollak and every builder at @base &amp; @baseapp — thank you for creating the fastest, cheapest, and most fun L2 on Earth. 
                             This explainer was made with pure community love. You didn’t just build a chain — you built the foundation for the next billion people to own their financial future. 
@@ -825,121 +632,15 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Controls -->
-            <div class="controls">
-                <button id="prev-btn">← Prev</button>
-                
-                <div class="timeline" id="timeline">
-                    <div class="progress" id="progress"></div>
-                </div>
-                
-                <button id="play-btn" class="play-btn">⏸️</button>
-                
-                <button id="next-btn">Next →</button>
-                
-                <button id="share-btn">
-                    𝕏 Share this explainer
-                </button>
-                
-                <div class="scene-indicator" id="scene-indicator"></div>
-            </div>
         </div>
     </div>
 
     <!-- Made by badge - Cleaned up -->
-    <a href="https://x.com/itsyourabdul" target="_blank" style="position: fixed; bottom: 28px; right: 40px; z-index: 999; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; color: #00F0FF; text-shadow: 0 0 14px #00F0FF; opacity: 0.95; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+    <a href="https://x.com/itsyourabdul" target="_blank" style="position: fixed; bottom: 28px; right: 40px; z-index: 999; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; color: #00F0FF; text-shadow: 0 0 14px #00F0FF; opacity: 0.95; display: flex; align-items: center; gap: 8px; text-decoration: none;">
         made by @itsyourabdul with ❤️ for Base &amp; Base App
     </a>
 
     <script>
-        // Scene management - same smooth logic
-        const scenes = document.querySelectorAll('.scene');
-        let currentScene = 0;
-        let isPlaying = true;
-        let autoInterval = null;
-        let progressTimeout = null;
-        const sceneDuration = 5200;
-
-        const progressBar = document.getElementById('progress');
-        const timeline = document.getElementById('timeline');
-        const playBtn = document.getElementById('play-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const indicator = document.getElementById('scene-indicator');
-        const shareBtn = document.getElementById('share-btn');
-
-        function createDots() {
-            indicator.innerHTML = '';
-            scenes.forEach((_, i) => {
-                const dot = document.createElement('div');
-                dot.className = 'dot';
-                dot.dataset.index = i;
-                dot.addEventListener('click', () => goToScene(i));
-                indicator.appendChild(dot);
-            });
-        }
-
-        function updateDots() {
-            const dots = indicator.querySelectorAll('.dot');
-            dots.forEach(dot => {
-                dot.classList.toggle('active', parseInt(dot.dataset.index) === currentScene);
-            });
-        }
-
-        function animateProgress() {
-            if (progressTimeout) clearTimeout(progressTimeout);
-            progressBar.style.transition = 'none';
-            progressBar.style.width = '0%';
-            void progressBar.offsetWidth;
-            progressBar.style.transition = `width ${sceneDuration}ms linear`;
-            progressBar.style.width = '100%';
-            progressTimeout = setTimeout(() => {
-                if (isPlaying) nextScene();
-            }, sceneDuration);
-        }
-
-        function showScene(index) {
-            scenes.forEach(scene => scene.classList.remove('active'));
-            scenes[index].classList.add('active');
-            currentScene = index;
-            updateDots();
-            animateProgress();
-        }
-
-        function nextScene() {
-            let next = (currentScene + 1) % scenes.length;
-            showScene(next);
-        }
-
-        function prevScene() {
-            let prev = (currentScene - 1 + scenes.length) % scenes.length;
-            showScene(prev);
-        }
-
-        function goToScene(index) {
-            showScene(index);
-        }
-
-        function togglePlayPause() {
-            isPlaying = !isPlaying;
-            playBtn.textContent = isPlaying ? '⏸️' : '▶️';
-            if (isPlaying) {
-                animateProgress();
-                startAutoPlay();
-            } else {
-                if (progressTimeout) clearTimeout(progressTimeout);
-                progressBar.style.transition = 'none';
-            }
-        }
-
-        function startAutoPlay() {
-            if (autoInterval) clearInterval(autoInterval);
-            autoInterval = setInterval(() => {
-                if (isPlaying) nextScene();
-            }, sceneDuration + 120);
-        }
-
         // Background canvas - unchanged but cleaner
         function initBackground() {
             const canvas = document.getElementById('bg-canvas');
@@ -1052,55 +753,10 @@
 
         // Initialize everything
         function init() {
-            createDots();
-            showScene(0);
-            startAutoPlay();
             initBackground();
             animateLiveStats();
             
-            playBtn.addEventListener('click', togglePlayPause);
-            nextBtn.addEventListener('click', () => {
-                if (!isPlaying) togglePlayPause();
-                nextScene();
-            });
-            prevBtn.addEventListener('click', () => {
-                if (!isPlaying) togglePlayPause();
-                prevScene();
-            });
-            
-            // Viral share - updated with stronger trading call
-            shareBtn.addEventListener('click', () => {
-                const tweetText = encodeURIComponent(
-                    `🌐 Just watched this beautiful Base × Base App animated explainer by @itsyourabdul!\n\n` +
-                    `Base App is the everything app for trading in 2026: social feed, instant USDC, in-chat swaps, 3.35% APY, self-custody.\n\n` +
-                    `Low fees, lightning speed, real community. This is how you trade the future.\n\n` +
-                    `Join with my invite & start trading today 👇\n` +
-                    `https://base.app/invite/paimon/7H9HMVYB\n\n` +
-                    `#Base #BaseApp #Onchain @base @baseapp @jessepollak`
-                );
-                window.open(`https://x.com/intent/tweet?text=${tweetText}`, '_blank');
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight') nextScene();
-                if (e.key === 'ArrowLeft') prevScene();
-                if (e.key === ' ') {
-                    e.preventDefault();
-                    togglePlayPause();
-                }
-            });
-            
-            timeline.addEventListener('click', (e) => {
-                const rect = timeline.getBoundingClientRect();
-                const percent = (e.clientX - rect.left) / rect.width;
-                progressBar.style.transition = 'none';
-                progressBar.style.width = `${percent * 100}%`;
-                void progressBar.offsetWidth;
-                progressBar.style.transition = `width ${sceneDuration * (1 - percent)}ms linear`;
-                progressBar.style.width = '100%';
-            });
-            
-            console.log('%c✅ Base × Base App explainer refreshed: cleaner UI, stronger trading influence, live stats ticker, founder love section, and more beautiful than ever!', 'color:#00F0FF; font-weight:700; font-size:14px');
+            console.log('%c✅ Base × Base App explainer refreshed: zoomed out, fully scrollable, new fonts, live stats in top-left, logo group removed!', 'color:#00F0FF; font-weight:700; font-size:14px');
         }
         
         window.onload = init;
