@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base × Base App • The Everything App on the Global Economy</title>
+    <title>Base × Base App • The Everything App on the Global Economy • HUB</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;family=Share+Tech+Mono&amp;display=swap');
 
         :root {
             --base-blue: #0052FF;
             --base-cyan: #00F0FF;
+            --hud-bg: rgba(6, 6, 6, 0.88);
+            --hud-border: 1px solid rgba(0, 240, 255, 0.2);
+            --cyber-glow: 0 0 15px rgba(0, 240, 255, 0.4);
         }
 
         * {
@@ -20,7 +23,7 @@
 
         body {
             font-family: 'Inter', system_ui, sans-serif;
-            background: #0A0A0A;
+            background: #020202; /* Deepened base background */
             color: white;
             height: auto;
             min-height: 100vh;
@@ -29,7 +32,7 @@
             scroll-behavior: smooth;
         }
 
-        /* Background Canvas - Enhanced with softer grid and deeper blockchain depth */
+        /* Background Canvas - Deep space blockchain depth */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -37,7 +40,7 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            opacity: 0.9;
+            opacity: 0.8;
             pointer-events: none;
         }
 
@@ -50,637 +53,653 @@
             padding: 0 20px;
         }
 
+        /* [NEW UI] - Command Center HUD Header */
         header {
-            padding: 22px 40px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: sticky;
-            top: 0;
-            background: rgba(10,10,10,0.95);
-            z-index: 50;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
+            top: 15px; /* Floats off the top */
+            z-index: 1000;
+            margin-top: 15px;
+            width: calc(100% - 30px);
+            margin-left: 15px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 0; /* Connected modules */
         }
 
-        /* Header logo (new) */
+        /* Modular parts of the new HUD header */
+        .hud-module {
+            background: var(--hud-bg);
+            border: var(--hud-border);
+            box-shadow: var(--cyber-glow);
+            backdrop-filter: blur(20px);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Brand Module (Left) */
+        .hud-brand {
+            border-radius: 16px 0 0 16px;
+            padding: 0 30px 0 20px;
+            border-right: none;
+        }
+        
+        /* Tagline Module (Center) */
+        .hud-tagline-module {
+            justify-content: center;
+            padding: 0 40px;
+            border-left: none;
+            border-right: none;
+        }
+
+        /* System Monitor Module (Right) */
+        .hud-monitor {
+            border-radius: 0 16px 16px 0;
+            padding: 0 25px;
+            border-left: none;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        /* [BRAND] */
         .header-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 28px;
+            gap: 14px;
+            font-size: 26px;
             font-weight: 700;
             color: white;
             text-decoration: none;
+            letter-spacing: -1px;
         }
 
-        .live-stats {
-            background: rgba(10,10,10,0.92);
-            padding: 9px 22px;
-            border-radius: 9999px;
-            font-size: 15px;
+        .logo-b {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #0052FF, #00F0FF);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 0 15px rgba(0,240,255,0.4);
+        }
+
+        /* [TAGLINE] */
+        .tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 19px;
             font-weight: 600;
+            letter-spacing: -0.4px;
+            color: #ccc;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .tagline-accent {
+            color: #00F0FF;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        /* [SYSTEM MONITOR/STATS] */
+        .live-stats {
             display: flex;
             align-items: center;
             gap: 16px;
-            box-shadow: 0 0 35px rgba(0, 240, 255, 0.45);
-            border: 1px solid rgba(0, 240, 255, 0.35);
-            flex-shrink: 0;
-            backdrop-filter: blur(12px);
+            font-family: 'Share Tech Mono', monospace; /* Professional tech-mono */
+            font-size: 15px;
+            color: #aaa;
         }
 
         .stat-item {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            position: relative;
+        }
+        .stat-item::after {
+            content: '';
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.1);
+            position: absolute;
+            right: -10px;
+        }
+        .stat-item:last-child::after { display: none; }
+
+        .stat-icon {
+            font-size: 17px;
+            opacity: 0.8;
         }
 
         .stat-value {
+            color: #eee;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+        }
+        .stat-value-accent {
             color: #00F0FF;
-            animation: pulseStat 2s infinite;
+            animation: pulseStat 2.5s infinite;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #777;
+            margin-top: -2px;
         }
 
-        .tagline {
-            font-family: 'Poppins', sans-serif;
-            font-size: 21px;
-            font-weight: 600;
-            letter-spacing: -0.6px;
-            color: #00F0FF;
-            max-width: 420px;
-            line-height: 1.2;
-            text-align: center;
-            flex: 1;
-        }
-
+        /* The Main Action Button, relocated within HUD right module */
         .header-cta {
             background: linear-gradient(90deg, #0052FF, #00F0FF);
             color: white;
-            padding: 14px 32px;
+            padding: 12px 26px;
             border-radius: 9999px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 17px;
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.65);
+            font-size: 16px;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             gap: 10px;
-            flex-shrink: 0;
+            margin-left: 10px;
         }
 
         .header-cta:hover {
-            transform: scale(1.06);
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.85);
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.7);
         }
 
         .main-content {
-            padding: 70px 0 100px;
+            padding: 80px 0 120px;
             display: flex;
             flex-direction: column;
-            gap: 130px;
+            gap: 140px;
         }
 
         .section {
             width: 100%;
-            max-width: 940px;
+            max-width: 1000px; /* Slightly wider for unique balance */
             margin: 0 auto;
             opacity: 1;
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         .scene-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 44px;
-            font-weight: 600;
+            font-size: 48px; /* Slightly larger, more expert presence */
+            font-weight: 700;
             line-height: 1.05;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             text-align: center;
+            letter-spacing: -1.5px;
         }
 
         .scene-subtitle {
-            font-size: 21px;
-            color: #ccc;
-            max-width: 740px;
-            margin: 0 auto 36px;
-            line-height: 1.45;
+            font-size: 22px;
+            color: #b0b0b0; /* Softer contrast for readability */
+            max-width: 760px;
+            margin: 0 auto 40px;
+            line-height: 1.5;
             text-align: center;
         }
 
-        /* Scene 1 - Cleaner intro */
-        .chain-animation {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 54px 0;
+        /* Scene 1 - Modernized */
+        .onchain-rev-label {
+            font-size: 16px;
+            letter-spacing: 7px;
+            color: #00F0FF;
+            margin-bottom: 16px;
+            font-weight: 700;
+            font-family: 'Share Tech Mono', monospace;
         }
 
-        .block {
-            width: 78px;
-            height: 78px;
-            background: linear-gradient(135deg, #0052FF, #00F0FF);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 34px;
-            color: white;
-            box-shadow: 0 0 50px #00F0FF;
-            animation: floatBlock 2.2s infinite ease-in-out;
-        }
-
-        .block:nth-child(2) { animation-delay: 180ms; }
-        .block:nth-child(3) { animation-delay: 360ms; }
-        .block:nth-child(4) { animation-delay: 540ms; }
-        .block:nth-child(5) { animation-delay: 720ms; }
-
-        /* Scene 3 - App mockup */
+        /* [UNIQUE UX] - The Main App Screen Mockup, Enhanced Depth */
         .app-mockup {
-            width: 340px;
-            height: 620px;
-            background: linear-gradient(180deg, #111, #1a1a1a);
+            width: 350px;
+            height: 640px;
+            background: linear-gradient(180deg, #080808 0%, #111 100%);
             border-radius: 56px;
-            margin: 40px auto;
+            margin: 50px auto;
             position: relative;
             box-shadow: 
-                0 0 100px rgba(0, 242, 255, 0.65),
-                inset 0 0 70px rgba(255,255,255,0.25);
+                0 0 80px rgba(0, 242, 255, 0.25), /* Fainter global glow */
+                0 40px 100px rgba(0,0,0,0.8), /* Stronger shadow depth */
+                inset 0 0 5px rgba(255,255,255,0.05); /* Very subtle inner rim */
             overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 2px solid rgba(255,255,255,0.03); /* Subtle bezel */
+        }
+        
+        /* Immersive background glow effect in mockup */
+        .app-mockup::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(0, 82, 255, 0.15) 0%, rgba(10,10,10,0) 70%);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            opacity: 0.6;
         }
 
         .app-mockup:hover {
-            transform: scale(1.06) rotate(1.5deg);
+            transform: translateY(-10px) rotateX(2deg); /* More expert 3D lift */
+        }
+        .app-mockup:hover::before {
+            opacity: 1;
         }
 
         .app-header {
-            height: 82px;
+            height: 85px;
             background: linear-gradient(90deg, #0052FF, #00F0FF);
             display: flex;
             align-items: center;
-            padding: 0 26px;
+            padding: 0 28px;
             color: white;
             font-weight: 700;
-            font-size: 21px;
-            gap: 14px;
-        }
-
-        .app-screen {
-            padding: 24px;
-            text-align: left;
-            color: white;
-            height: calc(100% - 82px);
-            overflow-y: auto;
-        }
-
-        .post {
-            background: rgba(255,255,255,0.1);
-            border-radius: 26px;
-            padding: 22px;
-            margin-bottom: 18px;
-            animation: postPop 2.8s infinite ease-in-out;
-            box-shadow: 0 12px 35px rgba(0, 240, 255, 0.25);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 17px;
-        }
-
-        /* Features */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 28px;
-            margin-top: 44px;
-        }
-
-        .feature-card {
-            background: rgba(255,255,255,0.08);
-            border-radius: 32px;
-            padding: 34px;
-            text-align: left;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(16px);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-14px) scale(1.05);
-            box-shadow: 0 0 50px rgba(0, 242, 255, 0.5);
-        }
-
-        .feature-icon {
-            font-size: 54px;
-            margin-bottom: 24px;
-            display: block;
-        }
-
-        /* Community */
-        .community-grid {
-            display: flex;
-            justify-content: center;
-            gap: 28px;
-            flex-wrap: wrap;
-            margin: 54px 0;
-        }
-
-        .follow-card {
-            background: rgba(255,255,255,0.08);
-            border-radius: 32px;
-            padding: 32px 38px;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            min-width: 280px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            color: white;
-        }
-
-        .follow-card:hover {
-            transform: scale(1.09);
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.6);
-            background: rgba(0, 240, 255, 0.2);
-        }
-
-        .follow-icon {
-            font-size: 58px;
-            filter: drop-shadow(0 0 20px #00F0FF);
-        }
-
-        /* Shoutout & Referral */
-        .shoutout-banner {
-            background: linear-gradient(90deg, rgba(0,82,255,0.18), rgba(0,240,255,0.18));
-            border: 2px solid #00F0FF;
-            border-radius: 9999px;
-            padding: 20px 40px;
-            margin: 44px auto;
-            max-width: 700px;
-            text-align: center;
             font-size: 22px;
-            font-weight: 600;
-            color: #00F0FF;
-            box-shadow: 0 0 55px rgba(0, 240, 255, 0.45);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 16px;
         }
 
-        .referral-card {
-            background: linear-gradient(135deg, rgba(0,82,255,0.18), rgba(0,240,255,0.18));
-            border: 4px solid #00F0FF;
-            border-radius: 40px;
-            padding: 40px;
-            max-width: 580px;
-            margin: 40px auto;
-            text-align: center;
-            box-shadow: 0 0 80px rgba(0, 240, 255, 0.55);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .app-screen {
+            padding: 26px;
+            text-align: left;
+            color: #eee;
+            height: calc(100% - 85px);
+            overflow-y: auto;
+            scrollbar-width: none; /* Immersive screen */
         }
+        .app-screen::-webkit-scrollbar { display: none; }
 
-        .referral-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 100px rgba(0, 240, 255, 0.75);
-        }
-
-        .referral-card h3 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 32px;
-            margin-bottom: 14px;
-            color: #00F0FF;
-        }
-
-        /* Founder love */
-        .founder-love {
-            background: rgba(0, 240, 255, 0.1);
-            border: 2px solid #00F0FF;
-            border-radius: 32px;
-            padding: 32px;
-            max-width: 640px;
-            margin: 40px auto 0;
-            text-align: center;
-            box-shadow: 0 0 45px rgba(0, 240, 255, 0.35);
-        }
-
-        /* CUTE BASE MASCOT - Smaller & relocated slightly right */
-        .mascot-container {
-            position: fixed;
-            top: 118px;
-            left: 210px;
-            z-index: 999;
-            cursor: pointer;
-            animation: mascotFloat 3.2s ease-in-out infinite;
-            filter: drop-shadow(0 22px 45px rgba(0, 240, 255, 0.65));
-            transition: transform 0.3s ease;
-            transform: scale(0.62);
-        }
-
-        .mascot-container:hover {
-            transform: scale(0.72) rotate(8deg);
-        }
-
-        .mascot-speech {
-            position: absolute;
-            top: -82px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            color: #0A0A0A;
-            padding: 12px 26px;
-            border-radius: 9999px;
-            font-size: 16.5px;
-            font-weight: 600;
-            white-space: nowrap;
-            box-shadow: 0 16px 38px rgba(0, 240, 255, 0.55);
+        .post {
+            background: rgba(255,255,255,0.04); /* More premium subtlety */
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
-            gap: 8px;
-            animation: speechPop 4.5s infinite ease-in-out;
-            z-index: 1000;
+            gap: 16px;
+            font-size: 16.5px;
+            line-height: 1.4;
+            border: 1px solid rgba(255,255,255,0.02);
+            animation: postPop 2.8s infinite ease-in-out;
         }
 
-        .mascot-speech::after {
+        /* Features - Unique layout */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: rgba(10, 10, 10, 0.5);
+            border-radius: 28px;
+            padding: 38px;
+            text-align: left;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
             content: '';
             position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 12px solid #fff;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top left, rgba(0, 240, 255, 0.08) 0%, rgba(10,10,10,0) 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        @keyframes mascotFloat {
-            0%, 100% { transform: translateY(0) rotate(-6deg); }
-            50% { transform: translateY(-38px) rotate(6deg); }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 242, 255, 0.2);
+        }
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
-        @keyframes speechPop {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.13); }
+        .feature-icon {
+            font-size: 58px;
+            margin-bottom: 26px;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .feature-title {
+            font-size: 27px;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .feature-desc {
+            font-size: 17px;
+            color: #aaa;
+            line-height: 1.5;
+            position: relative;
+            z-index: 2;
         }
 
-        #base-mascot {
-            animation: mascotWiggle 1.8s ease-in-out infinite alternate;
-        }
-
-        @keyframes mascotWiggle {
-            from { transform: rotate(-4deg); }
-            to { transform: rotate(4deg); }
-        }
-
-        /* Video-like entrance */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(60px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .section {
-            animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-play-state: paused;
-        }
-
-        .section.visible {
-            animation-play-state: running;
-        }
-
-        /* Keyframes */
-        @keyframes floatBlock {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-34px) rotate(8deg); }
-        }
-
-        @keyframes postPop {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.09); }
-        }
-
-        @keyframes pulseStat {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.75; }
-        }
-
-        .glow-text {
-            text-shadow: 0 0 50px #00F0FF;
-        }
-
-        /* Trading panel - refined shadows */
+        /* Trading panel - Unique expert "dark monitor" UX */
         .trading-panel {
             position: fixed;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 380px;
-            max-height: 640px;
-            background: rgba(12, 12, 12, 0.96);
-            border: 3px solid #00F0FF;
-            border-radius: 36px;
+            right: 30px;
+            top: calc(70px + 100px); /* Positioned relative to floating HUD header */
+            width: 390px;
+            max-height: calc(100vh - 200px);
+            background: var(--hud-bg);
+            border: var(--hud-border);
+            border-radius: 28px;
             box-shadow: 
-                0 0 100px rgba(0, 240, 255, 0.8),
-                0 30px 70px rgba(0, 0, 0, 0.75),
-                inset 0 0 45px rgba(255,255,255,0.2);
-            z-index: 9999;
-            padding: 24px;
+                0 0 60px rgba(0, 240, 255, 0.3),
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                inset 0 0 30px rgba(255,255,255,0.03);
+            z-index: 900;
+            padding: 26px;
             color: white;
             font-family: 'Inter', system_ui, sans-serif;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(22px);
+            backdrop-filter: blur(25px);
         }
 
         .trading-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 18px;
-            border-bottom: 1px solid rgba(255,255,255,0.12);
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
 
         .token-name {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 22px;
+            gap: 12px;
+            font-size: 24px;
             font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .trend-label {
+            font-size: 12px; 
+            font-family: 'Share Tech Mono', monospace;
+            background: rgba(0,240,255,0.1); 
+            color: #00F0FF; 
+            padding: 4px 12px; 
+            border-radius: 9999px; 
+            font-weight: 500;
+            border: 1px solid rgba(0,240,255,0.15);
         }
 
         .price-container {
             text-align: right;
+            font-family: 'Share Tech Mono', monospace;
         }
 
         .price {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
-            font-family: 'Poppins', sans-serif;
+            letter-spacing: -1px;
+            color: #eee;
         }
 
         .change-positive {
             color: #00ff9d;
             font-size: 17px;
-            font-weight: 600;
-        }
-
-        .change-negative {
-            color: #ff3b5c;
-            font-size: 17px;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .chart-wrapper {
-            height: 210px;
-            margin: 22px 0 18px;
-            background: rgba(0, 240, 255, 0.06);
-            border-radius: 22px;
+            height: 220px;
+            margin: 24px 0 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
             position: relative;
             overflow: hidden;
-        }
-
-        .order-book {
-            display: flex;
-            gap: 22px;
-            margin-bottom: 22px;
-        }
-
-        .order-side h4 {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .trade-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13.5px;
-            padding: 5px 0;
-            font-family: monospace;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .trade-item:last-child {
-            border-bottom: none;
-        }
-
-        .recent-trades h4 {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 12px;
-            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.03);
         }
 
         .trades-feed {
-            flex: 1;
-            overflow-y: auto;
-            font-size: 13.5px;
-            font-family: monospace;
-            line-height: 1.5;
-            padding-right: 4px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+        }
+        
+        /* Community/Follow Layout */
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Expert 2x2 symmetry */
+            gap: 25px;
+            margin: 60px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .trade-entry {
+        .follow-card {
+            background: rgba(10, 10, 10, 0.4);
+            border-radius: 24px;
+            padding: 30px;
             display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            align-items: center;
+            gap: 22px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.03);
         }
 
-        .trade-entry:last-child {
-            border-bottom: none;
+        .follow-card:hover {
+            transform: scale(1.03);
+            background: rgba(0, 240, 255, 0.05);
+            border-color: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 242, 255, 0.15);
         }
-
-        /* Notifications */
-        .notification {
-            background: linear-gradient(90deg, #00F0FF, #0052FF);
-            color: #0A0A0A;
-            padding: 14px 22px;
-            border-radius: 9999px;
-            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.65);
+        
+        .follow-title {
+            font-size: 26px;
             font-weight: 700;
-            font-size: 15px;
+            letter-spacing: -0.5px;
+        }
+        .follow-handle {
+            color: #00F0FF;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+        .follow-desc {
+            color: #999;
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        .follow-icon {
+            font-size: 54px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .follow-card:hover .follow-icon {
+            opacity: 1;
+            filter: drop-shadow(0 0 15px #00F0FF);
+        }
+
+        /* Shoutout Banner */
+        .shoutout-banner {
+            background: linear-gradient(90deg, rgba(0,82,255,0.12), rgba(0,240,255,0.12));
+            border: 1px solid rgba(0,240,255,0.25);
+            border-radius: 9999px;
+            padding: 18px 36px;
+            margin: 40px auto;
+            max-width: 720px;
+            text-align: center;
+            font-size: 21px;
+            font-weight: 600;
+            color: #00F0FF;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* Referral Card */
+        .referral-card {
+            background: linear-gradient(135deg, rgba(0,82,255,0.15), rgba(0,240,255,0.15));
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            border-radius: 36px;
+            padding: 45px;
+            max-width: 620px;
+            margin: 50px auto;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 240, 255, 0.3), 0 30px 80px rgba(0,0,0,0.7);
+            transition: all 0.4s ease;
+        }
+        .referral-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 240, 255, 0.6);
+            box-shadow: 0 0 80px rgba(0, 240, 255, 0.5), 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        /* CUTE BASE MASCOT - Relocated to Lower Left (Fixed HUD item) */
+        .mascot-container {
+            position: fixed;
+            bottom: 30px; /* Anchored to bottom */
+            left: 30px;   /* Anchored to left */
+            z-index: 1100; /* Stays above HUD header elements */
+            cursor: pointer;
+            animation: mascotFloat 3.2s ease-in-out infinite;
+            filter: drop-shadow(0 20px 40px rgba(0, 240, 255, 0.5));
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: scale(0.65); /* Keeps the smaller, premium scale */
+            transform-origin: bottom left;
+        }
+
+        .mascot-container:hover {
+            transform: scale(0.75) rotate(5deg);
+        }
+
+        /* Mascot speech bubble modernized */
+        .mascot-speech {
+            position: absolute;
+            top: -85px; /* Floats above */
+            left: 70px; /* Aligns unique to new corner location */
+            background: #fff;
+            color: #020202;
+            padding: 14px 28px;
+            border-radius: 9999px;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 15px 35px rgba(0, 240, 255, 0.4), 0 5px 15px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
             gap: 10px;
-            animation: notifPop 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), notifFade 3.8s forwards;
-            white-space: nowrap;
-            max-width: 300px;
+            animation: speechPop 4.5s infinite ease-in-out;
+            z-index: 1110;
         }
 
-        @keyframes notifPop {
-            0% { transform: translateY(30px) scale(0.8); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        .mascot-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 30px; /* Aligned to mascots new side */
+            transform: translateX(0);
+            border-left: 13px solid transparent;
+            border-right: 13px solid transparent;
+            border-top: 13px solid #fff;
         }
 
-        @keyframes notifFade {
-            80% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(-25px); }
+        /* Animation Keyframes */
+        @keyframes mascotFloat {
+            0%, 100% { transform: translateY(0) scale(0.65) rotate(-3deg); }
+            50% { transform: translateY(-25px) scale(0.65) rotate(3deg); }
         }
 
-        /* Mobile improvements - cleaner */
+        @keyframes speechPop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        #base-mascot {
+            animation: mascotWiggle 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes mascotWiggle {
+            from { transform: rotate(-3deg); }
+            to { transform: rotate(3deg); }
+        }
+
+        @keyframes pulseStat {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+            50% { opacity: 0.7; text-shadow: 0 0 5px rgba(0, 240, 255, 0.2); }
+        }
+
+        @keyframes postPop {
+            0%, 100% { transform: scale(1); background: rgba(255,255,255,0.04); }
+            50% { transform: scale(1.02); background: rgba(255,255,255,0.07); }
+        }
+
+        /* Mobile adaptation for new HUD */
         @media (max-width: 1280px) {
-            .trading-panel {
-                display: none !important;
-            }
+            .trading-panel { display: none !important; }
             
             header {
-                padding: 18px 20px;
-                flex-wrap: wrap;
-                gap: 14px;
+                grid-template-columns: 1fr; /* Stacked mobile HUD */
+                gap: 10px;
+                top: 10px;
+                width: calc(100% - 20px);
+                margin-left: 10px;
+            }
+            
+            .hud-module {
+                height: auto;
+                padding: 15px;
+                border-radius: 12px;
+                border: var(--hud-border);
                 justify-content: center;
+                text-align: center;
             }
             
-            .live-stats {
-                font-size: 13.5px;
-                padding: 7px 16px;
-                position: fixed;
-                top: 14px;
-                left: 20px;
-                z-index: 60;
-                width: auto;
-            }
-            
-            .tagline {
-                font-size: 18px;
-                max-width: none;
-            }
-            
-            .scene-title {
-                font-size: 38px;
-            }
-            
-            .app-mockup {
-                width: 290px;
-                height: 540px;
-            }
-            
-            .main-content {
-                gap: 90px;
-                padding: 50px 0;
+            .hud-brand { padding: 15px 20px; }
+            .hud-tagline-module { display: none; } /* Hide tagline for compact mobile */
+            .hud-monitor {
+                padding: 12px 20px;
+                flex-wrap: wrap;
+                gap: 10px;
             }
 
+            .header-cta { width: 100%; justify-content: center; margin: 10px 0 0; }
+
+            .scene-title { font-size: 38px; }
+            .app-mockup { width: 300px; height: 560px; }
+            .community-grid { grid-template-columns: 1fr; } /* Stacked community */
+            
             .mascot-container {
-                top: 88px;
-                left: 24px;
+                bottom: 20px;
+                left: 20px;
                 transform: scale(0.55);
             }
-            
             .mascot-speech {
                 font-size: 15px;
-                padding: 9px 20px;
-                top: -66px;
+                padding: 10px 22px;
+                top: -70px;
+                left: 50px;
+            }
+            @keyframes mascotFloat {
+                0%, 100% { transform: translateY(0) scale(0.55) rotate(-3deg); }
+                50% { transform: translateY(-15px) scale(0.55) rotate(3deg); }
             }
         }
     </style>
@@ -688,54 +707,32 @@
 <body>
     <canvas id="bg-canvas"></canvas>
 
-    <!-- RELOCATED LIVE STATS - Upper left corner (clean, modern, fixed) -->
-    <div class="live-stats" id="live-stats" style="position: fixed; top: 26px; left: 38px; z-index: 60;">
-        <div class="stat-item">🌐 <span id="tvl" class="stat-value">$4.49B</span> TVL</div>
-        <div class="stat-item">👥 <span id="dau" class="stat-value">512K</span> DAU</div>
-        <div class="stat-item">⚡ <span id="txns" class="stat-value">8.2M</span> txns today</div>
-    </div>
-
-    <!-- CUTE BASE MASCOT: Smaller + relocated a bit to the right -->
     <div class="mascot-container" onclick="window.open('https://base.app/invite/paimon/7H9HMVYB','_blank')">
         <div class="mascot-speech" id="speech-bubble">
-            <span id="speech-text">Hey! I'm Basey 🐳 Let's trade on Base! 🚀</span>
+            <span id="speech-text">Hub Online 🐳 Let's trade on Base! 🚀</span>
         </div>
         <svg id="base-mascot" width="152" height="178" viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Body -->
             <rect x="35" y="72" width="90" height="95" rx="28" ry="28" fill="#0052FF"/>
-            <!-- Head -->
             <ellipse cx="80" cy="58" rx="48" ry="46" fill="#00F0FF"/>
-            <!-- B on body -->
             <text x="80" y="135" font-family="Poppins, sans-serif" font-size="55" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">B</text>
-            <!-- Eyes -->
-            <circle cx="48" cy="48" r="13" fill="#0A0A0A"/>
-            <circle cx="112" cy="48" r="13" fill="#0A0A0A"/>
-            <!-- Eye shines -->
-            <circle cx="53" cy="44" r="5" fill="#ffffff"/>
-            <circle cx="117" cy="44" r="5" fill="#ffffff"/>
-            <!-- Happy mouth -->
-            <path id="mouth-path" d="M48 73 Q80 88 112 73" stroke="#0A0A0A" stroke-width="9" stroke-linecap="round" fill="none"/>
-            <!-- Left arm (waving) -->
+            <circle cx="48" cy="48" r="13" fill="#020202"/>
+            <circle cx="112" cy="48" r="13" fill="#020202"/>
+            <path id="mouth-path" d="M48 73 Q80 88 112 73" stroke="#020202" stroke-width="9" stroke-linecap="round" fill="none"/>
             <line id="left-arm" x1="38" y1="95" x2="12" y2="125" stroke="#00F0FF" stroke-width="22" stroke-linecap="round"/>
-            <!-- Right arm (waving) -->
             <line id="right-arm" x1="122" y1="95" x2="148" y2="125" stroke="#00F0FF" stroke-width="22" stroke-linecap="round"/>
-            <!-- Legs -->
             <rect x="52" y="160" width="20" height="28" rx="8" fill="#0052FF"/>
             <rect x="88" y="160" width="20" height="28" rx="8" fill="#0052FF"/>
-            <!-- Little sparkles around head -->
-            <circle cx="28" cy="18" r="6" fill="#00F0FF" opacity="0.7"/>
-            <circle cx="132" cy="22" r="5" fill="#00F0FF" opacity="0.7"/>
-            <circle cx="22" cy="32" r="4" fill="#00F0FF" opacity="0.7"/>
+            <circle cx="28" cy="18" r="6" fill="#00F0FF" opacity="0.6"/>
+            <circle cx="132" cy="22" r="5" fill="#00F0FF" opacity="0.6"/>
         </svg>
     </div>
 
-    <!-- Real-time Trading Interface -->
     <div class="trading-panel" id="trading-panel">
         <div class="trading-header">
             <div class="token-name">
                 🐸 
                 <span>$DEGEN</span>
-                <span style="font-size: 13px; background: rgba(0,240,255,0.2); color: #00F0FF; padding: 2px 10px; border-radius: 9999px; font-weight: 500;">TRENDING ON BASE</span>
+                <span class="trend-label">TRENDING • BASE</span>
             </div>
             <div class="price-container">
                 <div id="current-price" class="price">$0.01245</div>
@@ -744,108 +741,91 @@
         </div>
 
         <div class="chart-wrapper">
-            <canvas id="price-chart-canvas" width="332" height="210"></canvas>
-        </div>
-
-        <div class="order-book">
-            <div class="order-side">
-                <h4 style="color: #00ff9d;">BIDS</h4>
-                <div id="bids-list"></div>
-            </div>
-            <div class="order-side">
-                <h4 style="color: #ff3b5c;">ASKS</h4>
-                <div id="asks-list"></div>
-            </div>
+            <canvas id="price-chart-canvas" width="338" height="220"></canvas>
         </div>
 
         <div class="recent-trades">
-            <h4>🔥 LIVE TRADES • BASE APP FEED</h4>
-            <div id="trades-feed" class="trades-feed"></div>
+            <h4 style="font-size: 13px; font-family: 'Share Tech Mono', monospace; color: #777; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">🔥 LIVE TRADES • BASE APP FEED</h4>
+            <div id="trades-feed" class="trades-feed" style="flex: 1; overflow-y: auto; line-height: 1.6; color: #eee;"></div>
         </div>
     </div>
 
-    <!-- Live trade notifications -->
-    <div id="trade-notifications" style="position: fixed; left: 40px; bottom: 220px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; pointer-events: none; max-width: 300px;"></div>
+    <div id="trade-notifications" style="position: fixed; left: 40px; bottom: 220px; z-index: 10000; display: none;"></div>
 
     <div class="container">
-        <header>
-            <!-- Header logo (new for better branding & balance) -->
-            <a href="https://base.org" target="_blank" class="header-logo">
-                <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #0052FF, #00F0FF); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 26px; box-shadow: 0 0 20px rgba(0,240,255,0.5);">B</div>
-                Base
-            </a>
+        <header id="hud-header">
+            <div class="hud-module hud-brand">
+                <a href="https://base.org" target="_blank" class="header-logo">
+                    <div class="logo-b">B</div>
+                    Base
+                </a>
+            </div>
             
-            <!-- Tagline centered -->
-            <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
-                <div class="tagline">The Everything App on the Global Economy</div>
+            <div class="hud-module hud-tagline-module">
+                <div class="tagline">The Everything App on the <span class="tagline-accent">Global Economy</span></div>
+            </div>
+
+            <div class="hud-module hud-monitor">
+                <div class="live-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">🌐</span>
+                        <div>
+                            <div class="stat-label">TVL</div>
+                            <div id="tvl" class="stat-value">$4.49B</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <div>
+                            <div class="stat-label">DAU</div>
+                            <div id="dau" class="stat-value">512K</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⚡</span>
+                        <div>
+                            <div class="stat-label">Txns/Day</div>
+                            <div id="txns" class="stat-value stat-value-accent">8.2M</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="https://base.app/invite/paimon/7H9HMVYB" target="_blank" class="header-cta">
+                    🚀 Join &amp; Trade Now
+                </a>
             </div>
         </header>
 
         <div class="main-content">
             
-            <!-- Scene 1 -->
             <div class="section">
                 <div style="text-align: center;">
-                    <div style="font-size: 18px; letter-spacing: 8px; color: #00F0FF; margin-bottom: 14px; font-weight: 700;">ONCHAIN REVOLUTION • 2026</div>
-                    <h1 class="scene-title glow-text">A global economy,<br>built by all of us</h1>
+                    <div class="onchain-rev-label">ONCHAIN REVOLUTION • 2026</div>
+                    <h1 class="scene-title" style="text-shadow: 0 0 50px rgba(0, 240, 255, 0.4);">A global economy,<br>built by all of us</h1>
                     <p class="scene-subtitle">
                         Base is Coinbase’s Ethereum L2 — the fastest-growing chain in crypto. Ultra-low fees, lightning speed, and full Ethereum security.<br><br>
                         <strong>Base App</strong> is the everything app living on it: social trading feed where you discover tokens early, instant USDC payments, in-chat trading, and real yield. 
-                        Over $4.49B TVL and 500k+ daily active traders already living onchain.
+                        Over <span style="color: #00F0FF;">$4.49B TVL</span> and 500k+ daily active traders already living onchain.
                     </p>
                     
                     <div class="shoutout-banner">
-                        🔥 BIG SHOUTOUT to @base, @baseapp &amp; the entire Base team — you made onchain trading simple, fast &amp; fun for everyone!
+                        🔥 BIG SHOUTOUT to @base, @baseapp &amp; the entire Base team — you made onchain simple, fast &amp; fun!
                     </div>
                 </div>
             </div>
 
-            <!-- Scene 2: Base Chain -->
             <div class="section">
                 <div style="text-align: center;">
-                    <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 700; margin-bottom: 20px;">
-                        <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #0052FF, #00F0FF); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">B</div>
-                        @base
-                    </div>
-                    <h1 class="scene-title">The Ethereum L2 powering 2026</h1>
-                    <p class="scene-subtitle">6 Mwei gas • 200ms blocks • Instant finality • Built on OP Stack + secured by Ethereum</p>
-                    
-                    <div class="chain-animation">
-                        <div class="block">🌐</div>
-                        <div class="block">B</div>
-                        <div class="block">A</div>
-                        <div class="block">S</div>
-                        <div class="block">E</div>
-                    </div>
-                    
-                    <div style="max-width: 620px; margin: 40px auto; background: rgba(255,255,255,0.07); border-radius: 32px; padding: 32px; text-align: left;">
-                        <h4 style="color: #00F0FF; text-align: center; margin-bottom: 22px; font-size: 22px;">Why Base dominates in 2026</h4>
-                        <ul style="list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; font-size: 18px; line-height: 1.65;">
-                            <li style="display: flex; align-items: center; gap: 12px;">✅ <strong>Ultra-low fees</strong> — ~$0.0005 median</li>
-                            <li style="display: flex; align-items: center; gap: 12px;">✅ <strong>Lightning speed</strong> — 200ms blocks</li>
-                            <li style="display: flex; align-items: center; gap: 12px;">✅ <strong>$4.49B+ TVL</strong> — #1 L2</li>
-                            <li style="display: flex; align-items: center; gap: 12px;">✅ <strong>500k+ daily active traders</strong></li>
-                            <li style="display: flex; align-items: center; gap: 12px;">✅ <strong>Built by Coinbase</strong> — enterprise-grade security</li>
-                            <li style="display: flex; align-items: center; gap: 12px;">✅ <strong>100% EVM compatible</strong> — every dApp works instantly</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Scene 3: Base App -->
-            <div class="section">
-                <div style="text-align: center;">
-                    <div style="display: inline-flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 700; margin-bottom: 20px; color: #00F0FF;">
-                        <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #00F0FF, #0052FF); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px;">BA</div>
+                    <div style="display: inline-flex; align-items: center; gap: 14px; font-size: 28px; font-weight: 700; margin-bottom: 24px; color: #00F0FF;">
+                        <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00F0FF, #0052FF); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; box-shadow: 0 0 15px rgba(0,240,255,0.3);">BA</div>
                         @baseapp
                     </div>
                     <h1 class="scene-title">Base App • Built to Trade</h1>
-                    <p class="scene-subtitle">The social trading app where everything has value. Discover tokens in real time, trade instantly with friends in chat, send free USDC globally, and earn real yield — all self-custodial on Base.</p>
+                    <p class="scene-subtitle">Discover tokens in real time, trade instantly with friends in chat, send free USDC globally, and earn real yield — all self-custodial on Base.</p>
                     
-                    <div class="app-mockup">
+                    <div class="app-mockup" id="app-mockup">
                         <div class="app-header">
-                            <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #00F0FF, #0052FF); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white;">BA</div>
-                            Base App
+                            <div style="width: 34px; height: 34px; background: linear-gradient(135deg, #00F0FF, #0052FF); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 21px; color: white;">BA</div>
+                            Base App HUB
                         </div>
                         <div class="app-screen">
                             <div class="post">🚀 Sniped $NEWTOKEN early on the feed — already +420% in 8 minutes</div>
@@ -853,19 +833,17 @@
                             <div class="post">💬 Traded tokens with friends in encrypted chat — as easy as texting</div>
                             <div class="post">📈 Just aped into the next memecoin trending on the feed</div>
                             <div class="post">📊 My USDC is earning 3.35% APY right now — real daily yield</div>
-                            <div class="post">🔥 Be early. Trade social. Keep your keys. This is onchain freedom.</div>
+                            <div class="post">🔥 Be early. Trade social. Keep your keys. This is freedom.</div>
                         </div>
                     </div>
                     
-                    <p style="margin-top: 32px; font-size: 21px; max-width: 700px; margin-left: auto; margin-right: auto; color: #ddd; line-height: 1.5;">
+                    <p style="margin-top: 40px; font-size: 22px; max-width: 720px; margin-left: auto; margin-right: auto; color: #bbb; line-height: 1.6;">
                         No more switching apps. No more high fees. No more waiting.<br>
-                        <strong>Just open Base App and trade the future — live with the community.</strong><br><br>
-                        Thousands are already discovering 100x tokens before they moon. Your next big trade is waiting.
+                        <strong>Just open Base App and trade the future — live with the community.</strong>
                     </p>
                 </div>
             </div>
 
-            <!-- Scene 4: Features -->
             <div class="section">
                 <div style="text-align: center;">
                     <h1 class="scene-title">Why traders are moving to Base App</h1>
@@ -874,44 +852,38 @@
                     <div class="features-grid">
                         <div class="feature-card">
                             <span class="feature-icon">⚡</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Lightning Trades</h3>
-                            <p>200ms finality. Buy or sell instantly — no waiting for confirmations.</p>
+                            <h3 class="feature-title">Lightning Trades</h3>
+                            <p class="feature-desc">200ms finality. Buy or sell instantly — no waiting for confirmations.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">💸</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Fees Almost Zero</h3>
-                            <p>6 Mwei gas. Trade, send, and swap for pennies. Keep more of your wins.</p>
+                            <h3 class="feature-title">Fees Almost Zero</h3>
+                            <p class="feature-desc">6 Mwei gas. Trade, send, and swap for pennies. Keep more of your wins.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">📈</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Social Trading Feed</h3>
-                            <p>See what the community is buying in real time. Spot trends early and ape in.</p>
+                            <h3 class="feature-title">Social Trading Feed</h3>
+                            <p class="feature-desc">See what the community is buying in real time. Spot trends early and ape in.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">💬</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">In-Chat Trading</h3>
-                            <p>Negotiate and swap tokens directly in encrypted chat with friends or AI agents.</p>
+                            <h3 class="feature-title">In-Chat Trading</h3>
+                            <p class="feature-desc">Negotiate and swap tokens directly in encrypted chat with friends or AI agents.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">🔒</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">True Self-Custody</h3>
-                            <p>Your keys, your coins. No one can freeze or censor your trades.</p>
+                            <h3 class="feature-title">True Self-Custody</h3>
+                            <p class="feature-desc">Your keys, your coins. No one can freeze or censor your trades.</p>
                         </div>
                         <div class="feature-card">
                             <span class="feature-icon">🏆</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Earn While You Hold</h3>
-                            <p>Up to 3.35% APY on USDC — paid daily. Real yield on your stablecoins.</p>
-                        </div>
-                        <div class="feature-card">
-                            <span class="feature-icon">🔥</span>
-                            <h3 style="font-size: 26px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Be Early Every Time</h3>
-                            <p>The social feed shows trending tokens before they explode. Trade first, win big.</p>
+                            <h3 class="feature-title">Earn While You Hold</h3>
+                            <p class="feature-desc">Up to 3.35% APY on USDC — paid daily. Real yield on your stablecoins.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Scene 5: Community + Referral -->
             <div class="section">
                 <div style="text-align: center;">
                     <h1 class="scene-title">Join the movement</h1>
@@ -921,449 +893,4 @@
                         <a href="https://x.com/base" target="_blank" class="follow-card">
                             <div class="follow-icon">𝕏</div>
                             <div>
-                                <div style="font-size: 27px; font-weight: 700;">Follow <span style="color:#00F0FF">@base</span></div>
-                                <div style="color:#aaa; font-size: 17px;">Official Base updates &amp; ecosystem news</div>
-                            </div>
-                        </a>
-                        
-                        <a href="https://x.com/jessepollak" target="_blank" class="follow-card">
-                            <div class="follow-icon">𝕏</div>
-                            <div>
-                                <div style="font-size: 27px; font-weight: 700;">Follow <span style="color:#00F0FF">@jessepollak</span></div>
-                                <div style="color:#aaa; font-size: 17px;">Creator of Base • Vision &amp; deep dives</div>
-                            </div>
-                        </a>
-                        
-                        <a href="https://x.com/baseapp" target="_blank" class="follow-card">
-                            <div class="follow-icon">𝕏</div>
-                            <div>
-                                <div style="font-size: 27px; font-weight: 700;">Follow <span style="color:#00F0FF">@baseapp</span></div>
-                                <div style="color:#aaa; font-size: 17px;">Trade, earn &amp; chat on Base App</div>
-                            </div>
-                        </a>
-                        
-                        <a href="https://x.com/itsyourabdul" target="_blank" class="follow-card">
-                            <div class="follow-icon">𝕏</div>
-                            <div>
-                                <div style="font-size: 27px; font-weight: 700;">Follow <span style="color:#00F0FF">@itsyourabdul</span></div>
-                                <div style="color:#aaa; font-size: 17px;">Base App vibes &amp; onchain content</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="shoutout-banner" style="margin: 24px auto 34px;">
-                        🚀 THANK YOU @base &amp; @baseapp — you’re making onchain trading accessible to billions!
-                    </div>
-
-                    <div class="founder-love">
-                        <span style="font-size: 44px; display: block; margin-bottom: 14px;">❤️</span>
-                        <h3 style="font-family: 'Poppins', sans-serif; font-size: 28px; color: #00F0FF; margin-bottom: 18px;">A love letter to the Base team</h3>
-                        <p style="font-size: 19px; line-height: 1.55; max-width: 540px; margin: 0 auto;">
-                            To @jessepollak and every builder at @base &amp; @baseapp — thank you for creating the fastest, cheapest, and most fun L2 on Earth. 
-                            This explainer was made with pure community love. You didn’t just build a chain — you built the foundation for the next billion people to own their financial future. 
-                            Keep shipping. We’re all in.
-                        </p>
-                    </div>
-
-                    <div class="referral-card">
-                        <h3>🎟️ My Personal Base App Invite</h3>
-                        <p style="font-size: 21px; margin-bottom: 26px; color: #ddd; line-height: 1.45;">
-                            Jump in now. Discover trending tokens on the social feed, trade instantly, earn 3.35% APY, and own everything — all on the fastest L2 in crypto.
-                        </p>
-                        <a href="https://base.app/invite/paimon/7H9HMVYB" target="_blank" 
-                           style="display: inline-flex; align-items: center; justify-content: center; gap: 14px; background: linear-gradient(90deg, #0052FF, #00F0FF); color: white; padding: 20px 48px; border-radius: 9999px; font-size: 22px; font-weight: 700; text-decoration: none; box-shadow: 0 0 55px #00F0FF;">
-                            <span>🚀 Start Trading on Base App Now</span>
-                            <span style="font-size: 32px;">→</span>
-                        </a>
-                        <p style="margin-top: 26px; font-size: 16px; color: #aaa;">https://base.app/invite/paimon/7H9HMVYB<br><strong>By @itsyourabdul • Let’s grow the Base community together</strong></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Fixed CTA -->
-    <a href="https://base.app/invite/paimon/7H9HMVYB" target="_blank" class="header-cta" 
-       style="position: fixed; top: 26px; right: 40px; z-index: 100;">
-        🚀 Join Base App &amp; Start Trading Now
-    </a>
-
-    <script>
-        // Background canvas - enhanced softness
-        function initBackground() {
-            const canvas = document.getElementById('bg-canvas');
-            const ctx = canvas.getContext('2d');
-            
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
-            let particles = [];
-            
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 13 + 5;
-                    this.speedX = (Math.random() - 0.5) * 1.1;
-                    this.speedY = (Math.random() - 0.5) * 1.1;
-                    this.color = Math.random() > 0.5 ? '#0052FF' : '#00F0FF';
-                    this.type = Math.random() > 0.7 ? 'tx' : 'dot';
-                }
-                
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-                }
-                
-                draw() {
-                    ctx.save();
-                    ctx.shadowBlur = 22;
-                    ctx.shadowColor = this.color;
-                    ctx.fillStyle = this.color;
-                    ctx.globalAlpha = 0.8;
-                    
-                    if (this.type === 'tx') {
-                        ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size * 0.85, this.size * 0.85);
-                        ctx.fillStyle = '#0A0A0A';
-                        ctx.font = '700 8px monospace';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('TX', this.x, this.y + 3);
-                    } else {
-                        ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size, this.size);
-                    }
-                    ctx.restore();
-                }
-            }
-            
-            function createParticles(count) {
-                particles = [];
-                for (let i = 0; i < count; i++) {
-                    particles.push(new Particle());
-                }
-            }
-            
-            function connectParticles() {
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const dx = particles[i].x - particles[j].x;
-                        const dy = particles[i].y - particles[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        if (distance < 155) {
-                            ctx.save();
-                            ctx.strokeStyle = '#00F0FF';
-                            ctx.globalAlpha = (155 - distance) / 155 * 0.28;
-                            ctx.lineWidth = 1.4;
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.stroke();
-                            ctx.restore();
-                        }
-                    }
-                }
-            }
-            
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Softer grid
-                ctx.strokeStyle = 'rgba(0, 240, 255, 0.06)';
-                ctx.lineWidth = 1;
-                const gridSize = 68;
-                for (let x = gridSize; x < canvas.width; x += gridSize) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, 0);
-                    ctx.lineTo(x, canvas.height);
-                    ctx.stroke();
-                }
-                for (let y = gridSize; y < canvas.height; y += gridSize) {
-                    ctx.beginPath();
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(canvas.width, y);
-                    ctx.stroke();
-                }
-                
-                ctx.fillStyle = 'rgba(0, 82, 255, 0.08)';
-                ctx.font = '700 21px Poppins';
-                ctx.fillText('BASE', canvas.width * 0.07, canvas.height * 0.16);
-                ctx.fillText('L2', canvas.width * 0.89, canvas.height * 0.21);
-                ctx.fillText('ONCHAIN', canvas.width * 0.11, canvas.height * 0.83);
-                ctx.fillText('200ms', canvas.width * 0.79, canvas.height * 0.79);
-                
-                particles.forEach(p => {
-                    p.update();
-                    p.draw();
-                });
-                connectParticles();
-                requestAnimationFrame(animate);
-            }
-            
-            createParticles(52);
-            animate();
-            
-            setInterval(() => {
-                if (particles.length < 70) particles.push(new Particle());
-            }, 850);
-        }
-
-        // Live stats animation
-        function animateLiveStats() {
-            const tvlEl = document.getElementById('tvl');
-            const dauEl = document.getElementById('dau');
-            const txnsEl = document.getElementById('txns');
-
-            let tvl = 4490000000;
-            let dau = 512000;
-            let txns = 8200000;
-
-            setInterval(() => {
-                tvl += Math.floor(Math.random() * 1300000) + 700000;
-                dau += Math.floor(Math.random() * 850) + 280;
-                txns += Math.floor(Math.random() * 48000) + 18000;
-
-                tvlEl.textContent = '$' + (tvl / 1000000000).toFixed(2) + 'B';
-                dauEl.textContent = Math.floor(dau / 1000) + 'K';
-                txnsEl.textContent = (txns / 1000000).toFixed(1) + 'M';
-            }, 2700);
-        }
-
-        // Mascot animation
-        function animateMascot() {
-            const speechBubble = document.getElementById('speech-bubble');
-            const speechText = document.getElementById('speech-text');
-            const mascot = document.getElementById('base-mascot');
-            const mouth = document.getElementById('mouth-path');
-            const leftArm = document.getElementById('left-arm');
-            const rightArm = document.getElementById('right-arm');
-
-            const speeches = [
-                "Hey! I'm Basey 🐳 Let's trade on Base! 🚀",
-                "200ms blocks = instant wins ⚡",
-                "Sniping tokens with friends in chat 💬",
-                "USDC payments = free & instant 💸",
-                "3.35% APY on your USDC daily 📈",
-                "Be early. Trade social. Own the future 🔥"
-            ];
-            let speechIndex = 0;
-
-            setInterval(() => {
-                speechIndex = (speechIndex + 1) % speeches.length;
-                speechText.style.opacity = 0;
-                setTimeout(() => {
-                    speechText.textContent = speeches[speechIndex];
-                    speechText.style.opacity = 1;
-                }, 280);
-            }, 4100);
-
-            setInterval(() => {
-                mouth.setAttribute('d', 'M48 73 Q80 95 112 73');
-                setTimeout(() => {
-                    mouth.setAttribute('d', 'M48 73 Q80 88 112 73');
-                }, 210);
-
-                leftArm.setAttribute('x2', '8');
-                rightArm.setAttribute('x2', '152');
-                setTimeout(() => {
-                    leftArm.setAttribute('x2', '12');
-                    rightArm.setAttribute('x2', '148');
-                }, 170);
-            }, 1750);
-
-            setInterval(() => {
-                if (Math.random() > 0.65) {
-                    mascot.style.opacity = '0.25';
-                    setTimeout(() => { mascot.style.opacity = '1'; }, 85);
-                }
-            }, 2300);
-        }
-
-        // Scroll animations
-        function initScrollAnimations() {
-            const sections = document.querySelectorAll('.section');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.35 });
-            
-            sections.forEach(section => observer.observe(section));
-        }
-
-        // Real-time trading panel
-        function initTradingPanel() {
-            const panel = document.getElementById('trading-panel');
-            if (!panel) return;
-
-            let price = 0.01245;
-            let priceChange = 14.8;
-            const priceEl = document.getElementById('current-price');
-            const changeEl = document.getElementById('price-change');
-
-            const chartCanvas = document.getElementById('price-chart-canvas');
-            const ctx = chartCanvas.getContext('2d');
-            let priceHistory = Array(58).fill(0).map(() => 0.012 + Math.random() * 0.0018);
-
-            function drawChart() {
-                ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
-                ctx.fillStyle = 'rgba(0, 240, 255, 0.08)';
-                ctx.fillRect(0, 0, chartCanvas.width, chartCanvas.height);
-                
-                ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-                ctx.lineWidth = 1;
-                for (let i = 1; i < 6; i++) {
-                    ctx.beginPath();
-                    ctx.moveTo(0, i * chartCanvas.height / 5);
-                    ctx.lineTo(chartCanvas.width, i * chartCanvas.height / 5);
-                    ctx.stroke();
-                }
-                
-                ctx.strokeStyle = '#00F0FF';
-                ctx.lineWidth = 3.6;
-                ctx.shadowBlur = 22;
-                ctx.shadowColor = '#00F0FF';
-                ctx.beginPath();
-                
-                const maxP = Math.max(...priceHistory);
-                const minP = Math.min(...priceHistory);
-                const range = maxP - minP || 0.001;
-                
-                for (let i = 0; i < priceHistory.length; i++) {
-                    const x = (i / (priceHistory.length - 1)) * chartCanvas.width;
-                    const normalized = (priceHistory[i] - minP) / range;
-                    const y = chartCanvas.height * (1 - normalized * 0.85) - 12;
-                    if (i === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                }
-                ctx.stroke();
-                
-                const lastX = chartCanvas.width;
-                const lastNormalized = (priceHistory[priceHistory.length - 1] - minP) / range;
-                const lastY = chartCanvas.height * (1 - lastNormalized * 0.85) - 12;
-                ctx.shadowBlur = 32;
-                ctx.fillStyle = '#fff';
-                ctx.beginPath();
-                ctx.arc(lastX, lastY, 6.5, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            }
-
-            setInterval(() => {
-                const delta = (Math.random() * 0.00095) - 0.00038;
-                price = Math.max(0.011, price + delta);
-                priceChange = Math.max(-9, Math.min(29, priceChange + (delta * 430)));
-                
-                priceEl.textContent = '$' + price.toFixed(5);
-                
-                if (priceChange >= 0) {
-                    changeEl.className = 'change-positive';
-                    changeEl.textContent = '+' + priceChange.toFixed(1) + '% • LIVE';
-                } else {
-                    changeEl.className = 'change-negative';
-                    changeEl.textContent = priceChange.toFixed(1) + '% • LIVE';
-                }
-                
-                priceHistory.shift();
-                priceHistory.push(price);
-                drawChart();
-            }, 1380);
-
-            drawChart();
-
-            // Order book
-            let bids = [{p: 0.01240, s: 14200}, {p: 0.01237, s: 9800}, {p: 0.01234, s: 23100}];
-            let asks = [{p: 0.01251, s: 6700}, {p: 0.01254, s: 15400}, {p: 0.01258, s: 9200}];
-
-            function renderOrderBook() {
-                const bidsHTML = bids.map(b => 
-                    `<div class="trade-item"><span style="color:#00ff9d">$${b.p.toFixed(5)}</span><span>${b.s.toLocaleString()}</span></div>`
-                ).join('');
-                document.getElementById('bids-list').innerHTML = bidsHTML;
-
-                const asksHTML = asks.map(a => 
-                    `<div class="trade-item"><span style="color:#ff3b5c">$${a.p.toFixed(5)}</span><span>${a.s.toLocaleString()}</span></div>`
-                ).join('');
-                document.getElementById('asks-list').innerHTML = asksHTML;
-            }
-
-            setInterval(() => {
-                if (Math.random() > 0.5) {
-                    bids[0].p += (Math.random() * 0.00013 - 0.00007);
-                    bids[0].s += Math.floor(Math.random() * 1250) + 280;
-                } else {
-                    asks[0].p += (Math.random() * 0.00013 - 0.00007);
-                    asks[0].s += Math.floor(Math.random() * 1150) + 210;
-                }
-                renderOrderBook();
-            }, 2050);
-
-            renderOrderBook();
-
-            // Trades feed
-            const feed = document.getElementById('trades-feed');
-            const usersPool = ['@itsyourabdul', '@baseyfan', '@snipemaster', '@basequeen', '@cryptoChad', '@moonlord42'];
-
-            function addNewTrade() {
-                const isBuy = Math.random() > 0.45;
-                const amount = Math.floor(Math.random() * 1850) + 120;
-                const tradePrice = (price + (Math.random() * 0.0006 - 0.0003)).toFixed(5);
-                const user = usersPool[Math.floor(Math.random() * usersPool.length)];
-                
-                const color = isBuy ? '#00ff9d' : '#ff3b5c';
-                const label = isBuy ? '🟢 BOUGHT' : '🔴 SOLD';
-                
-                const entry = document.createElement('div');
-                entry.className = 'trade-entry';
-                entry.innerHTML = `
-                    <span style="color:${color}">${label}</span>
-                    <span>${amount} $DEGEN</span>
-                    <span style="color:#aaa">@${tradePrice}</span>
-                    <span style="color:#00F0FF">${user}</span>
-                `;
-                
-                feed.prepend(entry);
-                if (feed.children.length > 9) feed.lastElementChild.remove();
-                
-                createTradeNotification(user, isBuy ? 'bought' : 'sold', amount);
-            }
-
-            for (let i = 0; i < 6; i++) addNewTrade();
-            setInterval(addNewTrade, 1620);
-
-            function createTradeNotification(user, action, amount) {
-                const container = document.getElementById('trade-notifications');
-                const notif = document.createElement('div');
-                notif.className = 'notification';
-                notif.innerHTML = `🚀 ${user} just <strong>${action}</strong> <span style="font-size:17px">${amount}</span> $DEGEN on Base App!`;
-                container.appendChild(notif);
-                
-                setTimeout(() => {
-                    notif.style.transition = 'all 0.6s ease';
-                    notif.style.opacity = '0';
-                    notif.style.transform = 'translateY(-30px)';
-                    setTimeout(() => notif.remove(), 700);
-                }, 3750);
-            }
-        }
-
-        function init() {
-            initBackground();
-            animateLiveStats();
-            animateMascot();
-            initScrollAnimations();
-            initTradingPanel();
-            
-            console.log('%c✅ Base × Base App fully refreshed — cleaner UI, relocated mascot & stats, smaller mascot, premium feel! 🐳📈', 'color:#00F0FF; font-weight:700; font-size:15px');
-        }
-        
-        window.onload = init;
-    </script>
-</body>
-</html>
+                                <div class="follow-title">Follow <span class="follow-handle">@base</span>http://googleusercontent.com/image_generation_content/0
