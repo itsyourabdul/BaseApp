@@ -358,17 +358,18 @@
         /* === CUTE BASE MASCOT (Basey) - Animated video character === */
         .mascot-container {
             position: fixed;
-            bottom: 90px;
+            top: 100px;
             left: 50px;
             z-index: 999;
             cursor: pointer;
             animation: mascotFloat 3.2s ease-in-out infinite;
             filter: drop-shadow(0 20px 40px rgba(0, 240, 255, 0.6));
             transition: transform 0.3s ease;
+            transform: scale(0.8); /* made a bit smaller for perfect visibility */
         }
 
         .mascot-container:hover {
-            transform: scale(1.15) rotate(8deg);
+            transform: scale(0.95) rotate(8deg);
         }
 
         .mascot-speech {
@@ -674,7 +675,7 @@
             }
 
             .mascot-container {
-                bottom: 40px;
+                top: 70px;
                 left: 20px;
                 transform: scale(0.75);
             }
@@ -690,7 +691,7 @@
 <body>
     <canvas id="bg-canvas"></canvas>
 
-    <!-- CUTE BASE MASCOT: "Basey" - Animated video companion -->
+    <!-- CUTE BASE MASCOT: "Basey" - Animated video companion (now upper left + smaller) -->
     <div class="mascot-container" onclick="window.open('https://base.app/invite/paimon/7H9HMVYB','_blank')">
         <div class="mascot-speech" id="speech-bubble">
             <span id="speech-text">Hey! I'm Basey 🐳 Let's trade on Base! 🚀</span>
@@ -774,12 +775,10 @@
                 <div class="stat-item">⚡ <span id="txns" class="stat-value">8.2M</span> txns today</div>
             </div>
             
-            <div class="tagline">The Everything App on the Global Economy</div>
-            
-            <!-- Stronger, cleaner CTA -->
-            <a href="https://base.app/invite/paimon/7H9HMVYB" target="_blank" class="header-cta">
-                🚀 Join Base App &amp; Start Trading Now
-            </a>
+            <!-- Tagline now wrapped to stay perfectly centered after CTA relocation -->
+            <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+                <div class="tagline">The Everything App on the Global Economy</div>
+            </div>
         </header>
 
         <div class="main-content">
@@ -984,6 +983,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Relocated "Join Base App & Start Trading Now" CTA to upper right corner (fixed) -->
+    <a href="https://base.app/invite/paimon/7H9HMVYB" target="_blank" class="header-cta" 
+       style="position: fixed; top: 28px; right: 40px; z-index: 100;">
+        🚀 Join Base App &amp; Start Trading Now
+    </a>
 
     <!-- Made by badge - Cleaned up -->
     <a href="https://x.com/itsyourabdul" target="_blank" style="position: fixed; bottom: 28px; right: 40px; z-index: 999; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; color: #00F0FF; text-shadow: 0 0 14px #00F0FF; opacity: 0.95; display: flex; align-items: center; gap: 8px; text-decoration: none;">
@@ -1399,7 +1404,7 @@
             initScrollAnimations();
             initTradingPanel();   // ← NEW real-time trading panel
             
-            console.log('%c✅ Base × Base App explainer now feels like a full animated video with cute mascot Basey + LIVE trading terminal on the right! 🐳📈', 'color:#00F0FF; font-weight:700; font-size:14px');
+            console.log('%c✅ Base × Base App explainer now feels like a full animated video with cute mascot Basey (upper left + smaller) + LIVE trading terminal on the right! 🐳📈', 'color:#00F0FF; font-weight:700; font-size:14px');
         }
         
         window.onload = init;
