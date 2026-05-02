@@ -29,7 +29,7 @@
             scroll-behavior: smooth;
         }
 
-        /* Background Canvas - Cleaned up with subtle Base branding particles */
+        /* Background Canvas - Now enhanced with Base interface grid + subtle blockchain UI feel */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -37,7 +37,7 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            opacity: 0.75;
+            opacity: 0.85;
             pointer-events: none;
         }
 
@@ -468,8 +468,177 @@
             text-shadow: 0 0 45px #00F0FF;
         }
 
+        /* === NEW: Real-time Trading Interface (Base App style) - Right side, middle === */
+        .trading-panel {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 380px;
+            max-height: 640px;
+            background: rgba(12, 12, 12, 0.96);
+            border: 3px solid #00F0FF;
+            border-radius: 32px;
+            box-shadow: 
+                0 0 90px rgba(0, 240, 255, 0.75),
+                0 30px 60px rgba(0, 0, 0, 0.7),
+                inset 0 0 40px rgba(255,255,255,0.15);
+            z-index: 9999;
+            padding: 24px;
+            color: white;
+            font-family: 'Inter', system_ui, sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+        }
+
+        .trading-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .token-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .price-container {
+            text-align: right;
+        }
+
+        .price {
+            font-size: 26px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .change-positive {
+            color: #00ff9d;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .change-negative {
+            color: #ff3b5c;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .chart-wrapper {
+            height: 210px;
+            margin: 22px 0 18px;
+            background: rgba(0, 240, 255, 0.06);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-book {
+            display: flex;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .order-side {
+            flex: 1;
+        }
+
+        .order-side h4 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .trade-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13.5px;
+            padding: 5px 0;
+            font-family: monospace;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .trade-item:last-child {
+            border-bottom: none;
+        }
+
+        .recent-trades {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .recent-trades h4 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .trades-feed {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 13.5px;
+            font-family: monospace;
+            line-height: 1.5;
+            padding-right: 4px;
+        }
+
+        .trade-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        .trade-entry:last-child {
+            border-bottom: none;
+        }
+
+        /* Trade notification toasts */
+        .notification {
+            background: linear-gradient(90deg, #00F0FF, #0052FF);
+            color: #0A0A0A;
+            padding: 14px 22px;
+            border-radius: 9999px;
+            box-shadow: 0 15px 35px rgba(0, 240, 255, 0.6);
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: notifPop 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), notifFade 3.8s forwards;
+            white-space: nowrap;
+            max-width: 300px;
+        }
+
+        @keyframes notifPop {
+            0% { transform: translateY(30px) scale(0.8); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes notifFade {
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+
         /* Mobile improvements */
-        @media (max-width: 768px) {
+        @media (max-width: 1280px) {
+            .trading-panel {
+                display: none !important;
+            }
+            
             header {
                 padding: 16px 20px;
                 flex-wrap: wrap;
@@ -554,6 +723,47 @@
             <circle cx="22" cy="32" r="4" fill="#00F0FF" opacity="0.7"/>
         </svg>
     </div>
+
+    <!-- NEW: Real-time Trading Interface from Base App (middle right side) -->
+    <div class="trading-panel" id="trading-panel">
+        <div class="trading-header">
+            <div class="token-name">
+                🐸 
+                <span>$DEGEN</span>
+                <span style="font-size: 13px; background: rgba(0,240,255,0.2); color: #00F0FF; padding: 2px 10px; border-radius: 9999px; font-weight: 500;">TRENDING ON BASE</span>
+            </div>
+            <div class="price-container">
+                <div id="current-price" class="price">$0.01245</div>
+                <div id="price-change" class="change-positive">+14.8% • LIVE</div>
+            </div>
+        </div>
+
+        <!-- Live price chart (real-time animated) -->
+        <div class="chart-wrapper">
+            <canvas id="price-chart-canvas" width="332" height="210"></canvas>
+        </div>
+
+        <!-- Order book -->
+        <div class="order-book">
+            <div class="order-side">
+                <h4 style="color: #00ff9d;">BIDS</h4>
+                <div id="bids-list"></div>
+            </div>
+            <div class="order-side">
+                <h4 style="color: #ff3b5c;">ASKS</h4>
+                <div id="asks-list"></div>
+            </div>
+        </div>
+
+        <!-- Recent trades feed -->
+        <div class="recent-trades">
+            <h4>🔥 LIVE TRADES • BASE APP FEED</h4>
+            <div id="trades-feed" class="trades-feed"></div>
+        </div>
+    </div>
+
+    <!-- Live trade notifications (left side, pops when trades happen) -->
+    <div id="trade-notifications" style="position: fixed; left: 40px; bottom: 220px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; pointer-events: none; max-width: 300px;"></div>
 
     <div class="container">
         <header>
@@ -781,7 +991,7 @@
     </a>
 
     <script>
-        // Background canvas - unchanged but cleaner
+        // Background canvas - Enhanced with Base interface grid + blockchain UI feel
         function initBackground() {
             const canvas = document.getElementById('bg-canvas');
             const ctx = canvas.getContext('2d');
@@ -803,6 +1013,7 @@
                     this.speedX = (Math.random() - 0.5) * 1.2;
                     this.speedY = (Math.random() - 0.5) * 1.2;
                     this.color = Math.random() > 0.5 ? '#0052FF' : '#00F0FF';
+                    this.type = Math.random() > 0.7 ? 'tx' : 'dot'; // Some particles look like transactions
                 }
                 
                 update() {
@@ -818,7 +1029,17 @@
                     ctx.shadowColor = this.color;
                     ctx.fillStyle = this.color;
                     ctx.globalAlpha = 0.85;
-                    ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size, this.size);
+                    
+                    if (this.type === 'tx') {
+                        // Tiny transaction-style block
+                        ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size * 0.9, this.size * 0.9);
+                        ctx.fillStyle = '#0A0A0A';
+                        ctx.font = '700 9px monospace';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('TX', this.x, this.y + 3);
+                    } else {
+                        ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size, this.size);
+                    }
                     ctx.restore();
                 }
             }
@@ -853,6 +1074,32 @@
             
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Subtle Base interface grid (dashboard / blockchain explorer feel)
+                ctx.strokeStyle = 'rgba(0, 240, 255, 0.07)';
+                ctx.lineWidth = 1;
+                const gridSize = 72;
+                for (let x = gridSize; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+                for (let y = gridSize; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+                
+                // Faint Base branding text scattered in background
+                ctx.fillStyle = 'rgba(0, 82, 255, 0.09)';
+                ctx.font = '700 22px Poppins';
+                ctx.fillText('BASE', canvas.width * 0.08, canvas.height * 0.18);
+                ctx.fillText('L2', canvas.width * 0.88, canvas.height * 0.22);
+                ctx.fillText('ONCHAIN', canvas.width * 0.12, canvas.height * 0.82);
+                ctx.fillText('200ms', canvas.width * 0.78, canvas.height * 0.78);
+                
                 particles.forEach(p => {
                     p.update();
                     p.draw();
@@ -861,12 +1108,12 @@
                 requestAnimationFrame(animate);
             }
             
-            createParticles(42);
+            createParticles(48);
             animate();
             
             setInterval(() => {
-                if (particles.length < 58) particles.push(new Particle());
-            }, 1100);
+                if (particles.length < 65) particles.push(new Particle());
+            }, 900);
         }
 
         // Live stats ticker animation
@@ -963,14 +1210,196 @@
             sections.forEach(section => observer.observe(section));
         }
 
+        // === NEW: Real-time Base App Trading Interface (middle right) ===
+        function initTradingPanel() {
+            const panel = document.getElementById('trading-panel');
+            if (!panel) return;
+
+            // Live price
+            let price = 0.01245;
+            let priceChange = 14.8;
+            const priceEl = document.getElementById('current-price');
+            const changeEl = document.getElementById('price-change');
+
+            // Chart canvas
+            const chartCanvas = document.getElementById('price-chart-canvas');
+            const ctx = chartCanvas.getContext('2d');
+            let priceHistory = Array(58).fill(0).map(() => 0.012 + Math.random() * 0.0018);
+
+            function drawChart() {
+                ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+                
+                // Soft chart background
+                ctx.fillStyle = 'rgba(0, 240, 255, 0.08)';
+                ctx.fillRect(0, 0, chartCanvas.width, chartCanvas.height);
+                
+                // Light grid
+                ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+                ctx.lineWidth = 1;
+                for (let i = 1; i < 6; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, i * chartCanvas.height / 5);
+                    ctx.lineTo(chartCanvas.width, i * chartCanvas.height / 5);
+                    ctx.stroke();
+                }
+                
+                // Price line
+                ctx.strokeStyle = '#00F0FF';
+                ctx.lineWidth = 3.5;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#00F0FF';
+                ctx.beginPath();
+                
+                const maxP = Math.max(...priceHistory);
+                const minP = Math.min(...priceHistory);
+                const range = maxP - minP || 0.001;
+                
+                for (let i = 0; i < priceHistory.length; i++) {
+                    const x = (i / (priceHistory.length - 1)) * chartCanvas.width;
+                    const normalized = (priceHistory[i] - minP) / range;
+                    const y = chartCanvas.height * (1 - normalized * 0.85) - 12;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+                
+                // Final glowing dot
+                const lastX = chartCanvas.width;
+                const lastNormalized = (priceHistory[priceHistory.length - 1] - minP) / range;
+                const lastY = chartCanvas.height * (1 - lastNormalized * 0.85) - 12;
+                ctx.shadowBlur = 30;
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(lastX, lastY, 6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+
+            // Update price + chart every 1.4s
+            setInterval(() => {
+                const delta = (Math.random() * 0.0009) - 0.00035;
+                price = Math.max(0.011, price + delta);
+                priceChange = Math.max(-8, Math.min(28, priceChange + (delta * 420)));
+                
+                priceEl.textContent = '$' + price.toFixed(5);
+                
+                if (priceChange >= 0) {
+                    changeEl.className = 'change-positive';
+                    changeEl.textContent = '+' + priceChange.toFixed(1) + '% • LIVE';
+                } else {
+                    changeEl.className = 'change-negative';
+                    changeEl.textContent = priceChange.toFixed(1) + '% • LIVE';
+                }
+                
+                priceHistory.shift();
+                priceHistory.push(price);
+                drawChart();
+            }, 1400);
+
+            drawChart(); // initial
+
+            // Order book
+            let bids = [
+                {p: 0.01240, s: 14200},
+                {p: 0.01237, s: 9800},
+                {p: 0.01234, s: 23100}
+            ];
+            let asks = [
+                {p: 0.01251, s: 6700},
+                {p: 0.01254, s: 15400},
+                {p: 0.01258, s: 9200}
+            ];
+
+            function renderOrderBook() {
+                const bidsHTML = bids.map(b => 
+                    `<div class="trade-item"><span style="color:#00ff9d">$${b.p.toFixed(5)}</span><span>${b.s.toLocaleString()}</span></div>`
+                ).join('');
+                document.getElementById('bids-list').innerHTML = bidsHTML;
+
+                const asksHTML = asks.map(a => 
+                    `<div class="trade-item"><span style="color:#ff3b5c">$${a.p.toFixed(5)}</span><span>${a.s.toLocaleString()}</span></div>`
+                ).join('');
+                document.getElementById('asks-list').innerHTML = asksHTML;
+            }
+
+            setInterval(() => {
+                if (Math.random() > 0.5) {
+                    bids[0].p += (Math.random() * 0.00012 - 0.00006);
+                    bids[0].s += Math.floor(Math.random() * 1200) + 300;
+                } else {
+                    asks[0].p += (Math.random() * 0.00012 - 0.00006);
+                    asks[0].s += Math.floor(Math.random() * 1100) + 200;
+                }
+                renderOrderBook();
+            }, 2100);
+
+            renderOrderBook();
+
+            // Recent trades feed
+            const feed = document.getElementById('trades-feed');
+            const usersPool = ['@itsyourabdul', '@baseyfan', '@snipemaster', '@basequeen', '@cryptoChad', '@moonlord42'];
+
+            function addNewTrade() {
+                const isBuy = Math.random() > 0.45;
+                const amount = Math.floor(Math.random() * 1850) + 120;
+                const tradePrice = (price + (Math.random() * 0.0006 - 0.0003)).toFixed(5);
+                const user = usersPool[Math.floor(Math.random() * usersPool.length)];
+                
+                const color = isBuy ? '#00ff9d' : '#ff3b5c';
+                const label = isBuy ? '🟢 BOUGHT' : '🔴 SOLD';
+                
+                const entry = document.createElement('div');
+                entry.className = 'trade-entry';
+                entry.innerHTML = `
+                    <span style="color:${color}">${label}</span>
+                    <span>${amount} $DEGEN</span>
+                    <span style="color:#aaa">@${tradePrice}</span>
+                    <span style="color:#00F0FF">${user}</span>
+                `;
+                
+                feed.prepend(entry); // newest on top
+                
+                if (feed.children.length > 9) feed.lastElementChild.remove();
+                
+                // Trigger floating notification on left side
+                createTradeNotification(user, isBuy ? 'bought' : 'sold', amount);
+            }
+
+            // Initial trades
+            for (let i = 0; i < 6; i++) addNewTrade();
+            
+            // Real-time trades
+            setInterval(addNewTrade, 1650);
+
+            // Notification system
+            function createTradeNotification(user, action, amount) {
+                const container = document.getElementById('trade-notifications');
+                const notif = document.createElement('div');
+                notif.className = 'notification';
+                notif.innerHTML = `🚀 ${user} just <strong>${action}</strong> <span style="font-size:17px">${amount}</span> $DEGEN on Base App!`;
+                container.appendChild(notif);
+                
+                // Auto remove
+                setTimeout(() => {
+                    notif.style.transition = 'all 0.6s ease';
+                    notif.style.opacity = '0';
+                    notif.style.transform = 'translateY(-30px)';
+                    setTimeout(() => notif.remove(), 700);
+                }, 3800);
+            }
+
+            console.log('%c📈 Real-time Base App trading interface activated – fully live!', 'color:#00F0FF; font-weight:700; font-size:14px');
+        }
+
         // Initialize everything
         function init() {
             initBackground();
             animateLiveStats();
             animateMascot();
             initScrollAnimations();
+            initTradingPanel();   // ← NEW real-time trading panel
             
-            console.log('%c✅ Base × Base App explainer now feels like a full animated video with cute mascot Basey! 🐳', 'color:#00F0FF; font-weight:700; font-size:14px');
+            console.log('%c✅ Base × Base App explainer now feels like a full animated video with cute mascot Basey + LIVE trading terminal on the right! 🐳📈', 'color:#00F0FF; font-weight:700; font-size:14px');
         }
         
         window.onload = init;
