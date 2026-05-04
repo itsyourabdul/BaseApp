@@ -1,237 +1,968 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base App • Community Hub</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base App • Community Hub</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+<style>
+:root {
+--base-blue: #0052FF;
+--base-blue-hover: #0045D8;
+--bg-main: #0A0B0D;
+--bg-card: #141519;
+--bg-card-hover: #1A1C23;
+--border-color: #2A2D35;
+--text-main: #FFFFFF;
+--text-muted: #8A939B;
+--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+--font-mono: 'Share Tech Mono', ui-monospace, monospace;
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: var(--font-sans);
+background-color: var(--bg-main);
+color: var(--text-main);
+line-height: 1.6;
+overflow-x: hidden;
+scroll-behavior: smooth;
+-webkit-font-smoothing: antialiased;
+}
+
+/* Background elements */
+#bg-video {
+position: fixed;
+top: 50%;
+left: 50%;
+min-width: 100%;
+min-height: 100%;
+z-index: -1;
+transform: translate(-50%, -50%);
+opacity: 0.08;
+pointer-events: none;
+object-fit: cover;
+filter: grayscale(100%) contrast(1.2);
+}
+
+.bg-glow {
+position: fixed;
+top: -20%;
+left: -10%;
+width: 50vw;
+height: 50vw;
+background: radial-gradient(circle, rgba(0, 82, 255, 0.15) 0%, transparent 70%);
+z-index: -1;
+pointer-events: none;
+}
+
+/* NEW: Animated Base logos rising from the "ground" (bottom of screen) */
+#logo-particles {
+position: fixed;
+inset: 0;
+z-index: -2;
+pointer-events: none;
+overflow: hidden;
+}
+
+.floating-logo {
+position: absolute;
+color: rgba(0, 82, 255, 0.45);
+font-family: var(--font-sans);
+font-size: 28px;
+font-weight: 700;
+text-shadow: 0 0 12px #0052FF;
+animation: floatUp linear infinite;
+user-select: none;
+white-space: nowrap;
+}
+
+@keyframes floatUp {
+to {
+    transform: translateY(-120vh) rotate(720deg);
+}
+}
+
+/* Top Banner */
+.elite-banner {
+background: var(--base-blue);
+color: white;
+text-align: center;
+padding: 10px 20px;
+font-size: 13px;
+font-weight: 600;
+letter-spacing: 0.5px;
+position: sticky;
+top: 0;
+z-index: 9999;
+}
+
+/* Header */
+header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 24px 0;
+margin-bottom: 60px;
+border-bottom: 1px solid var(--border-color);
+}
+
+.header-logo {
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 24px;
+font-weight: 700;
+color: var(--text-main);
+text-decoration: none;
+}
+
+.logo-b {
+width: 40px;
+height: 40px;
+background: var(--base-blue);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+font-size: 22px;
+}
+
+.live-stats {
+display: flex;
+gap: 24px;
+font-size: 14px;
+color: var(--text-muted);
+}
+
+.stat-item {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+}
+
+.stat-value {
+color: var(--text-main);
+font-weight: 600;
+font-size: 16px;
+}
+
+.header-cta {
+background: var(--base-blue);
+color: white;
+padding: 12px 24px;
+border-radius: 100px;
+text-decoration: none;
+font-weight: 600;
+font-size: 15px;
+transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.header-cta:hover {
+background: var(--base-blue-hover);
+transform: translateY(-2px);
+}
+
+/* Sections */
+.main-content {
+display: flex;
+flex-direction: column;
+gap: 120px;
+padding-bottom: 120px;
+}
+
+.section {
+opacity: 0;
+transform: translateY(20px);
+transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+/* Typography */
+.scene-title {
+font-size: clamp(40px, 5vw, 64px);
+font-weight: 700;
+line-height: 1.1;
+margin-bottom: 24px;
+text-align: center;
+letter-spacing: -0.02em;
+}
+
+.scene-subtitle {
+font-size: 20px;
+color: var(--text-muted);
+max-width: 680px;
+margin: 0 auto 40px;
+text-align: center;
+line-height: 1.5;
+}
+
+.label-mono {
+font-family: var(--font-mono);
+font-size: 14px;
+color: var(--base-blue);
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 16px;
+text-align: center;
+display: block;
+}
+
+/* Features Grid */
+.features-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 24px;
+margin-top: 60px;
+}
+
+.feature-card {
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+border-radius: 24px;
+padding: 32px;
+transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+transform: translateY(-4px);
+border-color: var(--base-blue);
+background: var(--bg-card-hover);
+}
+
+.feature-icon {
+font-size: 32px;
+margin-bottom: 20px;
+display: inline-block;
+padding: 12px;
+background: rgba(0, 82, 255, 0.1);
+border-radius: 16px;
+}
+
+.feature-title {
+font-size: 20px;
+margin-bottom: 12px;
+font-weight: 600;
+}
+
+.feature-desc {
+font-size: 15px;
+color: var(--text-muted);
+}
+
+/* App Mockup - ENHANCED FEED */
+.app-mockup {
+width: 100%;
+max-width: 380px;
+height: 700px;
+background: var(--bg-card);
+border-radius: 48px;
+margin: 0 auto;
+border: 8px solid var(--border-color);
+overflow: hidden;
+box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+position: relative;
+}
+
+.app-header {
+height: 70px;
+background: rgba(255, 255, 255, 0.05);
+border-bottom: 1px solid var(--border-color);
+display: flex;
+align-items: center;
+padding: 0 24px;
+font-weight: 600;
+gap: 12px;
+font-size: 18px;
+}
+
+.mockup-feed-header {
+height: 70px;
+background: rgba(255, 255, 255, 0.05);
+border-bottom: 1px solid var(--border-color);
+display: flex;
+align-items: center;
+padding: 0 24px;
+font-weight: 600;
+gap: 12px;
+font-size: 18px;
+}
+
+.feed-feature-bar {
+font-size: 13px;
+color: var(--base-blue);
+padding: 0 24px 12px;
+font-family: var(--font-mono);
+display: flex;
+align-items: center;
+gap: 8px;
+border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.feed-carousel {
+overflow-x: auto;
+padding: 16px 24px 12px;
+scrollbar-width: none;
+}
+
+.feed-carousel::-webkit-scrollbar {
+display: none;
+}
+
+.carousel-inner {
+display: flex;
+gap: 16px;
+width: max-content;
+animation: scrollCarousel 22s linear infinite;
+}
+
+.carousel-inner:hover {
+animation-play-state: paused;
+}
+
+.carousel-card {
+background: rgba(255,255,255,0.06);
+border: 1px solid var(--border-color);
+border-radius: 20px;
+padding: 18px;
+min-width: 210px;
+box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+display: flex;
+flex-direction: column;
+}
+
+.carousel-card:hover {
+transform: scale(1.06) translateY(-4px);
+border-color: var(--base-blue);
+}
+
+.card-icon {
+font-size: 32px;
+margin-bottom: 12px;
+}
+
+.card-title {
+font-weight: 600;
+font-size: 15px;
+margin-bottom: 4px;
+}
+
+.card-value {
+font-size: 17px;
+font-weight: 700;
+color: #00ff9d;
+margin-bottom: 6px;
+}
+
+.card-desc {
+font-size: 13px;
+color: var(--text-muted);
+}
+
+.feed-posts {
+padding: 0 24px 24px;
+max-height: calc(100% - 170px);
+overflow-y: auto;
+scrollbar-width: none;
+display: flex;
+flex-direction: column;
+gap: 14px;
+}
+
+.feed-posts::-webkit-scrollbar {
+display: none;
+}
+
+.post {
+background: rgba(255, 255, 255, 0.03);
+border: 1px solid var(--border-color);
+border-radius: 18px;
+padding: 18px;
+font-size: 14.5px;
+line-height: 1.4;
+transition: all 0.3s ease;
+animation: postPop 0.8s ease backwards;
+}
+
+.post:hover {
+background: rgba(255, 255, 255, 0.1);
+transform: translateX(4px);
+}
+
+.post:nth-child(1) { animation-delay: 100ms; }
+.post:nth-child(2) { animation-delay: 300ms; }
+.post:nth-child(3) { animation-delay: 500ms; }
+.post:nth-child(4) { animation-delay: 700ms; }
+.post:nth-child(5) { animation-delay: 900ms; }
+
+@keyframes scrollCarousel {
+from { transform: translateX(0); }
+to { transform: translateX(-50%); }
+}
+
+@keyframes postPop {
+0% {
+    opacity: 0;
+    transform: translateY(20px);
+}
+100% {
+    opacity: 1;
+    transform: translateY(0);
+}
+}
+
+/* Community / Follow */
+.community-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+gap: 16px;
+max-width: 800px;
+margin: 40px auto 0;
+}
+
+.follow-card {
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+border-radius: 16px;
+padding: 24px;
+display: flex;
+align-items: center;
+gap: 16px;
+text-decoration: none;
+color: var(--text-main);
+transition: all 0.2s ease;
+}
+
+.follow-card:hover {
+border-color: var(--base-blue);
+background: var(--bg-card-hover);
+}
+
+.follow-icon {
+font-size: 24px;
+}
+
+.follow-title {
+font-size: 16px;
+font-weight: 600;
+}
+
+.follow-handle {
+color: var(--text-muted);
+font-size: 14px;
+font-weight: 400;
+}
+
+/* Shoutout Banner / Pills */
+.shoutout-banner {
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+border-radius: 24px;
+padding: 40px;
+margin: 60px auto 0;
+max-width: 800px;
+text-align: center;
+}
+
+.for-everyone {
+display: flex;
+flex-wrap: wrap;
+gap: 12px;
+justify-content: center;
+margin-top: 24px;
+}
+
+.for-pill {
+background: rgba(255, 255, 255, 0.05);
+border: 1px solid var(--border-color);
+padding: 8px 16px;
+border-radius: 100px;
+font-size: 14px;
+font-weight: 500;
+color: var(--text-muted);
+}
+
+/* CTA Area */
+.cta-wrapper {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 32px;
+margin-top: 40px;
+}
+
+.qr-container {
+background: white;
+padding: 16px;
+border-radius: 24px;
+}
+
+.primary-cta {
+background: var(--base-blue);
+color: white;
+font-size: 20px;
+font-weight: 600;
+padding: 18px 40px;
+border-radius: 100px;
+text-decoration: none;
+box-shadow: 0 8px 24px rgba(0, 82, 255, 0.3);
+transition: all 0.3s ease;
+display: inline-flex;
+align-items: center;
+gap: 12px;
+}
+
+.primary-cta:hover {
+background: var(--base-blue-hover);
+transform: translateY(-2px);
+box-shadow: 0 12px 32px rgba(0, 82, 255, 0.4);
+}
+
+/* Mascot - DANCING */
+.mascot-container {
+position: fixed;
+bottom: 24px;
+left: 24px;
+z-index: 1000;
+cursor: pointer;
+transform-origin: bottom left;
+transition: transform 0.3s ease;
+animation: mascotDance 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes mascotDance {
+0% {
+    transform: scale(1) rotate(-4deg) translateY(0);
+}
+100% {
+    transform: scale(1.08) rotate(4deg) translateY(-6px);
+}
+}
+
+.mascot-container:hover {
+transform: scale(1.12);
+animation-play-state: paused;
+}
+
+.mascot-speech {
+position: absolute;
+top: -80px;
+left: 80px;
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+color: var(--text-main);
+padding: 12px 20px;
+border-radius: 16px;
+font-size: 14px;
+white-space: nowrap;
+box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+opacity: 1;
+transition: opacity 0.4s ease;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+header {
+flex-direction: column;
+gap: 20px;
+padding: 20px 0;
+}
+.live-stats {
+flex-wrap: wrap;
+justify-content: center;
+}
+.scene-title {
+font-size: 32px;
+}
+.mascot-container {
+transform: scale(0.75);
+bottom: 12px;
+left: 12px;
+}
+}
+</style>
 </head>
 <body>
 
-    <!-- Top Banner -->
-    <div class="elite-banner">
-        🔵 COMMUNITY PROJECT • POWERED BY BASE • INVITE-ONLY ACCESS HUB
+<!-- Top Banner -->
+<div class="elite-banner">
+    🔵 COMMUNITY PROJECT • POWERED BY BASE • INVITE-ONLY ACCESS HUB
+</div>
+
+<div class="bg-glow"></div>
+<video id="bg-video" autoplay loop muted playsinline>
+    <source src="https://assets.codepen.io/3364143/7btrrd.mp4" type="video/mp4">
+</video>
+
+<!-- NEW: Animated Base logos rising from the ground -->
+<div id="logo-particles"></div>
+
+<!-- Mascot (now dancing) -->
+<div class="mascot-container" onclick="window.open('https://base.app/invite/paimon/7H9HMVYB?fbclid=IwY2xjawRlr1ZleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5aTSav9-dKlTRIXftWzWoMGku5Q73VSuNSPA7OSQB8Q74yb1LwVaxQkrXFkw_aem_kBxxKjAR2PQDh00dCMibnA','_blank')">
+    <div class="mascot-speech" id="speech-bubble">
+        <span id="speech-text">Welcome to the Base Community Hub 🔵</span>
     </div>
+    <svg id="base-mascot" width="100" height="100" viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="35" y="72" width="90" height="95" rx="28" ry="28" fill="#0052FF"/>
+        <ellipse cx="80" cy="58" rx="48" ry="46" fill="#FFFFFF"/>
+        <circle cx="48" cy="48" r="8" fill="#0A0B0D"/>
+        <circle cx="112" cy="48" r="8" fill="#0A0B0D"/>
+        <text x="80" y="135" font-family="Inter, sans-serif" font-size="50" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">B</text>
+        <path d="M48 73 Q80 88 112 73" stroke="#0A0B0D" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <line x1="38" y1="95" x2="12" y2="115" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round"/>
+        <line x1="122" y1="95" x2="148" y2="115" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round"/>
+        <rect x="52" y="160" width="16" height="20" rx="8" fill="#0052FF"/>
+        <rect x="92" y="160" width="16" height="20" rx="8" fill="#0052FF"/>
+    </svg>
+</div>
 
-    <div class="bg-glow"></div>
-    <video id="bg-video" autoplay loop muted playsinline>
-        <source src="https://assets.codepen.io/3364143/7btrrd.mp4" type="video/mp4">
-    </video>
-
-    <!-- Mascot -->
-    <div class="mascot-container" onclick="window.open('https://base.app/invite/paimon/7H9HMVYB?fbclid=IwY2xjawRlr1ZleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5aTSav9-dKlTRIXftWzWoMGku5Q73VSuNSPA7OSQB8Q74yb1LwVaxQkrXFkw_aem_kBxxKjAR2PQDh00dCMibnA','_blank')">
-        <div class="mascot-speech" id="speech-bubble">
-            <span id="speech-text">Welcome to the Base Community Hub 🔵</span>
+<div class="container">
+    <!-- Header -->
+    <header>
+        <a href="https://base.org" target="_blank" class="header-logo">
+            <div class="logo-b">B</div>
+            Base
+        </a>
+        
+        <div class="live-stats">
+            <div class="stat-item">
+                <span class="stat-label">TVL</span>
+                <span class="stat-value">$4.49B</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">DAU</span>
+                <span class="stat-value">512K</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Txns/Day</span>
+                <span class="stat-value" style="color: var(--base-blue);">8.2M</span>
+            </div>
         </div>
-        <svg id="base-mascot" width="100" height="100" viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="35" y="72" width="90" height="95" rx="28" ry="28" fill="#0052FF"/>
-            <ellipse cx="80" cy="58" rx="48" ry="46" fill="#FFFFFF"/>
-            <circle cx="48" cy="48" r="8" fill="#0A0B0D"/>
-            <circle cx="112" cy="48" r="8" fill="#0A0B0D"/>
-            <text x="80" y="135" font-family="Inter, sans-serif" font-size="50" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">B</text>
-            <path d="M48 73 Q80 88 112 73" stroke="#0A0B0D" stroke-width="6" stroke-linecap="round" fill="none"/>
-            <line x1="38" y1="95" x2="12" y2="115" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round"/>
-            <line x1="122" y1="95" x2="148" y2="115" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round"/>
-            <rect x="52" y="160" width="16" height="20" rx="8" fill="#0052FF"/>
-            <rect x="92" y="160" width="16" height="20" rx="8" fill="#0052FF"/>
-        </svg>
-    </div>
 
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <a href="https://base.org" target="_blank" class="header-logo">
-                <div class="logo-b">B</div>
-                Base
-            </a>
+        <a href="https://base.app/invite/paimon/7H9HMVYB?fbclid=IwY2xjawRlr1ZleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5aTSav9-dKlTRIXftWzWoMGku5Q73VSuNSPA7OSQB8Q74yb1LwVaxQkrXFkw_aem_kBxxKjAR2PQDh00dCMibnA" target="_blank" class="header-cta">
+            Get Access
+        </a>
+    </header>
+
+    <div class="main-content">
+        
+        <!-- Hero Section -->
+        <div class="section">
+            <span class="label-mono">Onchain Revolution</span>
+            <h1 class="scene-title">The global economy,<br>built for the world.</h1>
+            <p class="scene-subtitle">
+                Base is an Ethereum L2 built on the OP Stack. Experience sub-penny fees, fast finality, and full Ethereum security. Base App is your gateway: social feed, trading, and real yield, fully self-custodial.
+            </p>
+            <div style="text-align: center;">
+                <a href="https://base.app/invite/paimon/7H9HMVYB?fbclid=IwY2xjawRlr1ZleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5aTSav9-dKlTRIXftWzWoMGku5Q73VSuNSPA7OSQB8Q74yb1LwVaxQkrXFkw_aem_kBxxKjAR2PQDh00dCMibnA" target="_blank" class="primary-cta">
+                    Claim Your Invite
+                </a>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="section">
+            <span class="label-mono">Infrastructure</span>
+            <h2 class="scene-title">Why Base App?</h2>
+            <p class="scene-subtitle">Experience the next generation of onchain interaction, designed for builders and traders.</p>
             
-            <div class="live-stats">
-                <div class="stat-item">
-                    <span class="stat-label">TVL</span>
-                    <span class="stat-value">$4.49B</span>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">Lightning Speed</h3>
+                    <p class="feature-desc">Sub-second finality. Experience immediate confirmations.</p>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-label">DAU</span>
-                    <span class="stat-value">512K</span>
+                <div class="feature-card">
+                    <span class="feature-icon">💸</span>
+                    <h3 class="feature-title">Low Fees</h3>
+                    <p class="feature-desc">Sub-penny transactions. Trade without friction.</p>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-label">Txns/Day</span>
-                    <span class="stat-value" style="color: var(--base-blue);">8.2M</span>
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h3 class="feature-title">Ethereum Security</h3>
+                    <p class="feature-desc">Backed by the security and decentralization of Ethereum.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3 class="feature-title">Social Alpha</h3>
+                    <p class="feature-desc">Discover projects and interact directly with the community.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📈</span>
+                    <h3 class="feature-title">Real Yield</h3>
+                    <p class="feature-desc">Earn competitive APY on your assets, transparently.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔑</span>
+                    <h3 class="feature-title">Self-Custody</h3>
+                    <p class="feature-desc">Your keys, your crypto. Total control over your digital assets with BASE. </p>
                 </div>
             </div>
+        </div>
 
-            <a href="https://base.app/invite/paimon/7H9HMVYB?fbclid=IwY2xjawRlr1ZleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5aTSav9-dKlTRIXftWzWoMGku5Q73VSuNSPA7OSQB8Q74yb1LwVaxQkrXFkw_aem_kBxxKjAR2PQDh00dCMibnA" target="_blank" class="header-cta">
-                Get Access
-            </a>
-        </header>
-
-        <div class="main-content">
+        <!-- App Mockup Area - NOW FULLY ANIMATED SCROLLABLE FEED -->
+        <div class="section" style="text-align: center;">
+            <span class="label-mono">Platform</span>
+            <h2 class="scene-title">Built for the Onchain User</h2>
+            <p class="scene-subtitle">Join thousands of users discovering and building in the Base ecosystem.<br><strong>Trade • Earn • Predict • Chat with friends or agents</strong></p>
             
-            <!-- Hero Section -->
-            <div class="section">
-                <span class="label-mono">Onchain Revolution</span>
-                <h1 class="scene-title">The global economy,<br>built for the world.</h1>
-                <p class="scene-subtitle">
-                    Base is an Ethereum L2 built on the OP Stack. Experience sub-penny fees, fast finality, and full Ethereum security. Base App is your gateway: social feed, trading, and real yield, fully self-custodial.
+            <div class="app-mockup">
+                <!-- App header -->
+                <div class="mockup-feed-header">
+                    <div style="width: 32px; height: 32px; background: var(--base-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: white;">B</div>
+                    Base Feed
+                    <div style="margin-left:auto; font-size:13px; background:#00ff9d; color:#0A0B0D; padding:2px 10px; border-radius:9999px; font-weight:700;">LIVE</div>
+                </div>
+
+                <!-- Feature bar -->
+                <div class="feed-feature-bar">
+                    <span>📈 Trade</span>
+                    <span>💰 Earn</span>
+                    <span>🔮 Predict</span>
+                    <span>💬 Agents &amp; Friends</span>
+                </div>
+
+                <!-- Horizontal Carousel: Trending trades, collectibles, live events -->
+                <div class="feed-carousel">
+                    <div class="carousel-inner" id="carousel-inner">
+                        <!-- Card 1 - Trending Trade -->
+                        <div class="carousel-card">
+                            <div class="card-icon">📈</div>
+                            <div class="card-content">
+                                <div class="card-title">Trending Trade</div>
+                                <div class="card-value">USDC → ETH +18.7%</div>
+                                <div class="card-desc">420k volume • 2 min ago</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 2 - New Collectible -->
+                        <div class="carousel-card">
+                            <div class="card-icon">🪙</div>
+                            <div class="card-content">
+                                <div class="card-title">New Collectible</div>
+                                <div class="card-value">BasePFP #1337</div>
+                                <div class="card-desc">Limited mint • 0.001 ETH</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 3 - Live Chat Event -->
+                        <div class="carousel-card">
+                            <div class="card-icon">💬</div>
+                            <div class="card-content">
+                                <div class="card-title">Live Agent Chat</div>
+                                <div class="card-value">BTC to $120k?</div>
+                                <div class="card-desc">AI agent + 184 online</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Duplicates for seamless infinite scroll -->
+                        <div class="carousel-card">
+                            <div class="card-icon">📈</div>
+                            <div class="card-content">
+                                <div class="card-title">Trending Trade</div>
+                                <div class="card-value">USDC → ETH +18.7%</div>
+                                <div class="card-desc">420k volume • 2 min ago</div>
+                            </div>
+                        </div>
+                        <div class="carousel-card">
+                            <div class="card-icon">🪙</div>
+                            <div class="card-content">
+                                <div class="card-title">New Collectible</div>
+                                <div class="card-value">BasePFP #1337</div>
+                                <div class="card-desc">Limited mint • 0.001 ETH</div>
+                            </div>
+                        </div>
+                        <div class="carousel-card">
+                            <div class="card-icon">💬</div>
+                            <div class="card-content">
+                                <div class="card-title">Live Agent Chat</div>
+                                <div class="card-value">BTC to $120k?</div>
+                                <div class="card-desc">AI agent + 184 online</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vertical scrollable feed with more info -->
+                <div class="feed-posts">
+                    <div class="post">🚀 Just earned <strong>12.4% APY</strong> staking BASE — real yield, transparent onchain</div>
+                    <div class="post">💸 Sent 5,000 USDC to a friend instantly — sub-penny fees, self-custodial</div>
+                    <div class="post">🔮 Predicted the next market move with Base AI agent and won 0.8 ETH reward</div>
+                    <div class="post">👥 Chatting live with @baseapp agent and community degens about the next airdrop</div>
+                    <div class="post">🏆 New onchain collectible unlocked • Trade it or stake it for extra yield</div>
+                    <div class="post">📍 Global transfer complete • 12 seconds • $0.0004 fee • Full Ethereum security</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA / Referral Section -->
+        <div class="section">
+            <div class="cta-wrapper">
+                <span class="label-mono"> USE INVITE LINK • GET INSTANT ACCESS</span>
+                <h2 class="scene-title" style="margin-bottom: 0;">Claim Your Exclusive Spot</h2>
+                <p class="scene-subtitle" style="color: var(--base-blue);">This referral is hand-delivered by @itsyourabdul. Anyone can join through this invite link. Use it to get in early.</p>
+                
+                <div class="qr-container">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fbase.app%2Finvite%2Fpaimon%2F7H9HMVYB" 
+                         alt="Base App VIP Referral QR Code — Exclusive access with @itsyourabdul." 
+                         style="display: block; border-radius: 8px;">
+                </div>
+                
+                <p style="font-size: 16px; color: var(--text-muted); text-align: center; max-width: 420px; margin-top: -16px;">
+                    Scan or tap to unlock Base App with <span style="color: var(--text-main); font-weight: 600;">@itsyourabdul</span>’s private referral
                 </p>
-                <div style="text-align: center;">
-                    <a href="https://base.app/invite/paimon/7H9HMVYB?fbclid=IwY2xjawRlr1ZleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5aTSav9-dKlTRIXftWzWoMGku5Q73VSuNSPA7OSQB8Q74yb1LwVaxQkrXFkw_aem_kBxxKjAR2PQDh00dCMibnA" target="_blank" class="primary-cta">
-                        Claim Your Invite
-                    </a>
-                </div>
+
+                <a href="https://base.app/invite/paimon/7H9HMVYB?fbclid=IwY2xjawRlr1ZleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5aTSav9-dKlTRIXftWzWoMGku5Q73VSuNSPA7OSQB8Q74yb1LwVaxQkrXFkw_aem_kBxxKjAR2PQDh00dCMibnA" target="_blank" class="primary-cta">
+                    JOIN AND TRADE NOW ON BASE APP AND EARN EXCLUSIVE REWARDS
+                </a>
             </div>
 
-            <!-- Features -->
-            <div class="section">
-                <span class="label-mono">Infrastructure</span>
-                <h2 class="scene-title">Why Base App?</h2>
-                <p class="scene-subtitle">Experience the next generation of onchain interaction, designed for builders and traders.</p>
-                
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <span class="feature-icon">⚡</span>
-                        <h3 class="feature-title">Lightning Speed</h3>
-                        <p class="feature-desc">Sub-second finality. Experience immediate confirmations.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">💸</span>
-                        <h3 class="feature-title">Low Fees</h3>
-                        <p class="feature-desc">Sub-penny transactions. Trade without friction.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">🔒</span>
-                        <h3 class="feature-title">Ethereum Security</h3>
-                        <p class="feature-desc">Backed by the security and decentralization of Ethereum.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">📱</span>
-                        <h3 class="feature-title">Social Alpha</h3>
-                        <p class="feature-desc">Discover projects and interact directly with the community.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">📈</span>
-                        <h3 class="feature-title">Real Yield</h3>
-                        <p class="feature-desc">Earn competitive APY on your assets, transparently.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">🔑</span>
-                        <h3 class="feature-title">Self-Custody</h3>
-                        <p class="feature-desc">Your keys, your crypto. Total control over your digital assets with BASE. </p>
-                    </div>
+            <div class="shoutout-banner">
+                <h3 style="margin-bottom: 16px; font-weight: 600; font-size: 20px;">Base App is exclusively for</h3>
+                <div class="for-everyone">
+                    <div class="for-pill">NEETS</div>
+                    <div class="for-pill">CHADS</div>
+                    <div class="for-pill">TRADERS</div>
+                    <div class="for-pill">SCHIZOS</div>
+                    <div class="for-pill">NORMIES</div>
+                    <div class="for-pill">BUILDERS</div>
+                    <div class="for-pill">BADDIES</div>
+                    <div class="for-pill">DEGENS</div>
+                    <div class="for-pill">CHUDS</div>
+                    <div class="for-pill">UNCS</div>
+                    <div class="for-pill" style="background: var(--base-blue); color: white; border-color: var(--base-blue);">YOU — THE CHOSEN</div>
+                </div>
+                <div style="margin-top: 24px; font-size: 14px; color: var(--text-muted); font-family: var(--font-mono);">
+                    Base is the global hub for Builders, Traders, and AI companies.
                 </div>
             </div>
-
-            <!-- App Mockup Area -->
-            <div class="section" style="text-align: center;">
-                <span class="label-mono">Platform</span>
-                <h2 class="scene-title">Built for the Onchain User</h2>
-                <p class="scene-subtitle">Join thousands of users discovering and building in the Base ecosystem.</p>
-                
-                <div class="app-mockup">
-                    <div class="app-header">
-                        <div style="width: 32px; height: 32px; background: var(--base-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: white;">B</div>
-                        Feed
-                    </div>
-                    <div class="app-screen">
-                        <div class="post">🚀 Discovered a new protocol in the community feed.</div>
-                        <div class="post">💸 Transferred USDC globally with sub-penny fees.</div>
-                        <div class="post">💬 Engaging with builders in dedicated spaces.</div>
-                        <div class="post">📈 Tracking portfolio growth seamlessly.</div>
-                        <div class="post">🔥 Experience the true power of L2 scaling.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CTA / Referral Section -->
-            <div class="section">
-                <div class="cta-wrapper">
-                    <span class="label-mono"> USE INVITE LINK • GET INSTANT ACCESS</span>
-                    <h2 class="scene-title" style="margin-bottom: 0;">Claim Your Exclusive Spot</h2>
-                    <p class="scene-subtitle" style="color: var(--base-blue);">This referral is hand-delivered by @itsyourabdul. Anyone can join through this invite link. Use it to get in early.</p>
-                    
-                    <div class="qr-container">
-                        <!-- We use the base URL for the QR code to keep it scannable, but the link is the full conversion one -->
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fbase.app%2Finvite%2Fpaimon%2F7H9HMVYB" 
-                             alt="Base App VIP Referral QR Code — Exclusive access with @itsyourabdul." 
-                             style="display: block; border-radius: 8px;">
-                    </div>
-                    
-                    <p style="font-size: 16px; color: var(--text-muted); text-align: center; max-width: 420px; margin-top: -16px;">
-                        Scan or tap to unlock Base App with <span style="color: var(--text-main); font-weight: 600;">@itsyourabdul</span>’s private referral
-                    </p>
-
-                    <a href="https://base.app/invite/paimon/7H9HMVYB?fbclid=IwY2xjawRlr1ZleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR5aTSav9-dKlTRIXftWzWoMGku5Q73VSuNSPA7OSQB8Q74yb1LwVaxQkrXFkw_aem_kBxxKjAR2PQDh00dCMibnA" target="_blank" class="primary-cta">
-                        JOIN AND TRADE NOW ON BASE APP AND EARN EXCLUSIVE REWARDS
-                    </a>
-                </div>
-
-                <div class="shoutout-banner">
-                    <h3 style="margin-bottom: 16px; font-weight: 600; font-size: 20px;">Base App is exclusively for</h3>
-                    <div class="for-everyone">
-                        <div class="for-pill">NEETS</div>
-                        <div class="for-pill">CHADS</div>
-                        <div class="for-pill">TRADERS</div>
-                        <div class="for-pill">SCHIZOS</div>
-                        <div class="for-pill">NORMIES</div>
-                        <div class="for-pill">BUILDERS</div>
-                        <div class="for-pill">BADDIES</div>
-                        <div class="for-pill">DEGENS</div>
-                        <div class="for-pill">CHUDS</div>
-                        <div class="for-pill">UNCS</div>
-                        <div class="for-pill" style="background: var(--base-blue); color: white; border-color: var(--base-blue);">YOU — THE CHOSEN</div>
-                    </div>
-                    <div style="margin-top: 24px; font-size: 14px; color: var(--text-muted); font-family: var(--font-mono);">
-                        Base is the global hub for Builders, Traders, and AI companies.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Community Links -->
-            <div class="section">
-                <h3 style="text-align: center; margin-bottom: 16px;">Connect</h3>
-                <div class="community-grid">
-                    <a href="https://x.com/Base" target="_blank" class="follow-card">
-                        <span class="follow-icon">🔵</span>
-                        <div>
-                            <div class="follow-title">Base</div>
-                            <div class="follow-handle">@Base</div>
-                        </div>
-                    </a>
-                    <a href="https://x.com/baseapp" target="_blank" class="follow-card">
-                        <span class="follow-icon">📱</span>
-                        <div>
-                            <div class="follow-title">Base App</div>
-                            <div class="follow-handle">@baseapp</div>
-                        </div>
-                    </a>
-                    <a href="https://x.com/jessepollak" target="_blank" class="follow-card">
-                        <span class="follow-icon">👨‍💻</span>
-                        <div>
-                            <div class="follow-title">Jesse Pollak</div>
-                            <div class="follow-handle">@jessepollak</div>
-                        </div>
-                    </a>
-                    <a href="https://x.com/itsyourabdul" target="_blank" class="follow-card">
-                        <span class="follow-icon">⚡</span>
-                        <div>
-                            <div class="follow-title">Community Builder</div>
-                            <div class="follow-handle">@itsyourabdul</div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
         </div>
-    </div>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+        <!-- Community Links -->
+        <div class="section">
+            <h3 style="text-align: center; margin-bottom: 16px;">Connect</h3>
+            <div class="community-grid">
+                <a href="https://x.com/Base" target="_blank" class="follow-card">
+                    <span class="follow-icon">🔵</span>
+                    <div>
+                        <div class="follow-title">Base</div>
+                        <div class="follow-handle">@Base</div>
+                    </div>
+                </a>
+                <a href="https://x.com/baseapp" target="_blank" class="follow-card">
+                    <span class="follow-icon">📱</span>
+                    <div>
+                        <div class="follow-title">Base App</div>
+                        <div class="follow-handle">@baseapp</div>
+                    </div>
+                </a>
+                <a href="https://x.com/jessepollak" target="_blank" class="follow-card">
+                    <span class="follow-icon">👨‍💻</span>
+                    <div>
+                        <div class="follow-title">Jesse Pollak</div>
+                        <div class="follow-handle">@jessepollak</div>
+                    </div>
+                </a>
+                <a href="https://x.com/itsyourabdul" target="_blank" class="follow-card">
+                    <span class="follow-icon">⚡</span>
+                    <div>
+                        <div class="follow-title">Community Builder</div>
+                        <div class="follow-handle">@itsyourabdul</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Intersection Observer for smooth section fade-ins
+    const sections = document.querySelectorAll('.section');
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15
+    };
+
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+
+    // 2. Mascot Speech Logic (unchanged but still cycling)
+    const speechElement = document.getElementById('speech-text');
+    const speechBubble = document.getElementById('speech-bubble');
+
+    const speechMessages = [
+        "Welcome to the Community Hub 🔵",
+        "Base App is built for the builders",
+        "Trade • Earn • Predict • Chat",
+        "Discover the ecosystem early",
+        "Connect with real community members",
+        "Join the onchain revolution",
+        "Tap the link to get your access",
+        "Building a global economy together",
+        "Don't miss out on the next big thing"
+    ];
+
+    let speechIndex = 0;
+
+    function cycleSpeech() {
+        if (!speechBubble || !speechElement) return;
+        speechBubble.style.opacity = 0;
+        setTimeout(() => {
+            speechIndex = (speechIndex + 1) % speechMessages.length;
+            speechElement.textContent = speechMessages[speechIndex];
+            speechBubble.style.opacity = 1;
+        }, 400);
+    }
+    setInterval(cycleSpeech, 4800);
+
+    // 3. NEW: Animated Base logos rising from the ground (the "ground" is now alive)
+    const particlesContainer = document.getElementById('logo-particles');
+    if (particlesContainer) {
+        for (let i = 0; i < 28; i++) {
+            const logo = document.createElement('div');
+            logo.className = 'floating-logo';
+            logo.textContent = 'B';
+            logo.style.left = `${Math.random() * 100}vw`;
+            logo.style.animationDuration = `${Math.random() * 28 + 14}s`;
+            logo.style.animationDelay = `-${Math.random() * 35}s`;
+            logo.style.opacity = Math.random() * 0.5 + 0.15;
+            logo.style.fontSize = `${Math.random() * 22 + 20}px`;
+            particlesContainer.appendChild(logo);
+        }
+    }
+
+    console.log('%c🔵 Base Community Hub Loaded with dancing mascot + animated feed + floating Base logos', 'color: #0052FF; font-size: 14px; font-weight: bold;');
+});
+</script>
 </body>
 </html>
